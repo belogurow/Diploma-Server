@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    name: postgres
+    driver-class-name: org.postgresql.Driver
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
+    password: ${SOCIAL_NETWORK_DB_URL:diploma-server}
+
+
+  liquibase:
+    change-log: classpath:dbconfig/liquibase/liquibaseConfig.xml
+    check-change-log-location: true
+    drop-first: ${LIQUIBASE_DROP_FIRST:false}
