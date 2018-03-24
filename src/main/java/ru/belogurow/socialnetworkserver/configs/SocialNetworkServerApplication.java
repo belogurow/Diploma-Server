@@ -1,7 +1,11 @@
-package ru.belogurow.socialnetworkserver;
+package ru.belogurow.socialnetworkserver.configs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * @author alexbelogurow
+ */
 
 @SpringBootApplication
 public class SocialNetworkServerApplication {
