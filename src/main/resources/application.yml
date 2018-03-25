@@ -1,13 +1,33 @@
 spring:
   datasource:
-    name: postgres
+    name: diploma-server
     driver-class-name: org.postgresql.Driver
-    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server}
     username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
-    password: ${SOCIAL_NETWORK_DB_URL:diploma-server}
+    password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma-server}
 
 
   liquibase:
     change-log: classpath:dbconfig/liquibase/liquibaseConfig.xml
     check-change-log-location: true
     drop-first: ${LIQUIBASE_DROP_FIRST:false}
+
+#  jpa:
+#    properties:
+#      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: true
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    name: diploma-server-test
+    driver-class-name: org.postgresql.Driver
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server-test}
+    username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma-server}
+    password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma-server}
+  liquibase:
+    drop-first: false

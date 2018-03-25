@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="ru.belogurow.socialnetworkserver.users.mybatis.mapper.UserMapper">
+    <resultMap id="UserMap" type="ru.belogurow.socialnetworkserver.users.domain.User">
+        <id column="ID" property="id" javaType="UUID" jdbcType="OTHER"/>
+        <result column="LOGIN" property="login"/>
+        <result column="NAME" property="name"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="USER_STATUS" property="userStatus"/>
+    </resultMap>
+
+    <insert id="insert" >
+        INSERT INTO "USER"(id, login, name, password, user_status)
+        VALUES (
+            #{id, jdbcType=OTHER},
+            #{login},
+            #{name},
+            #{password},
+            #{userStatus}
+        )
+    </insert>
+
+    <update id="update" parameterType="User">
+        UPDATE "USER"
+        SET
+            NAME = #{name},
+            LOGIN = #{login},
+            PASSWORD = #{password},
+            USER_STATUS = #{userStatus}
+        WHERE
+            ID = #{id, jdbcType=OTHER}
+    </update>
+
+    <select id="findById" resultMap="UserMap">
+        SELECT * FROM "USER"
+        WHERE ID = #{id, jdbcType=OTHER}
+    </select>
+
+    <select id="findAll" resultMap="UserMap">
+        SELECT * FROM "USER"
+    </select>
+
+    <delete id="delete">
+        DELETE FROM "USER"
+        WHERE ID = #{id, jdbcType=OTHER}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM "USER"
+    </delete>
+
+</mapper>

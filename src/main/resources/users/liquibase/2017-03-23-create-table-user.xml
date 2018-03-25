@@ -12,14 +12,22 @@
 
         <createTable tableName="USER">
             <column name="ID" type="UUID">
-                <constraints primaryKey="true" primaryKeyName="PK_USER"/>
+                <constraints primaryKey="true"/>
             </column>
 
-            <column name="NAME" type="CHARACTER(100)">
+            <column name="LOGIN" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="NAME" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="PASSWORD" type="CHARACTER(100)">
+            <column name="PASSWORD" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="USER_STATUS" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

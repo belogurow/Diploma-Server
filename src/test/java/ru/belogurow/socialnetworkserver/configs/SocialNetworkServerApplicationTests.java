@@ -1,4 +1,4 @@
-package ru.belogurow.socialnetworkserver;
+package ru.belogurow.socialnetworkserver.configs;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
