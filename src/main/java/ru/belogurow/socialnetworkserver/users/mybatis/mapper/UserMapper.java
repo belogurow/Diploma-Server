@@ -10,4 +10,5 @@ import ru.belogurow.socialnetworkserver.users.domain.User;
 
 @Mapper
 public interface UserMapper extends DbMapper<User> {
+    boolean exists(String login);
 }

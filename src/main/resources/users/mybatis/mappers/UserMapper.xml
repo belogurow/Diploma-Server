@@ -11,7 +11,7 @@
     </resultMap>
 
     <insert id="insert" >
-        INSERT INTO "USER"(id, login, name, password, user_status)
+        INSERT INTO "USER" (id, login, name, password, user_status)
         VALUES (
             #{id, jdbcType=OTHER},
             #{login},
@@ -49,5 +49,13 @@
     <delete id="deleteAll">
         DELETE FROM "USER"
     </delete>
+
+    <select id="exists" resultType="java.lang.Boolean">
+        SELECT EXISTS(
+                SELECT *
+                FROM "USER"
+                WHERE LOGIN = #{login, jdbcType=OTHER}
+        )
+    </select>
 
 </mapper>

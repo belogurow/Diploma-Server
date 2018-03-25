@@ -1,7 +1,7 @@
 package ru.belogurow.socialnetworkserver.common.mybatis;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author alexbelogurow
@@ -27,7 +27,7 @@ public interface DbMapper<T>  {
       * @param id - The id of object
       * @return Found object
       */
-     T findById(Serializable id);
+     T findById(UUID id);
 
      /**
       * Find all objects
@@ -38,11 +38,13 @@ public interface DbMapper<T>  {
      /**
       * Delete object T from the DB
       * @param t - The object
+      * @return Result of operation
       */
      boolean delete(T t);
 
      /**
       * Delete all object from the DB
+      * @return Result of operation
       */
      boolean deleteAll();
 

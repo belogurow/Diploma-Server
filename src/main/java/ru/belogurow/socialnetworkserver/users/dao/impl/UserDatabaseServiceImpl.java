@@ -6,8 +6,8 @@ import ru.belogurow.socialnetworkserver.users.dao.UserDatabaseService;
 import ru.belogurow.socialnetworkserver.users.domain.User;
 import ru.belogurow.socialnetworkserver.users.mybatis.mapper.UserMapper;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author alexbelogurow
@@ -21,16 +21,16 @@ public class UserDatabaseServiceImpl implements UserDatabaseService {
 
     @Override
     public boolean insert(User user) {
-        return userMapper.insert(user);
+        return this.notExists(user.getLogin()) && userMapper.insert(user);
     }
 
     @Override
     public boolean update(User user) {
-        return userMapper.update(user);
+        return this.exists(user.getLogin()) && userMapper.update(user);
     }
 
     @Override
-    public User findById(Serializable id) {
+    public User findById(UUID id) {
         return userMapper.findById(id);
     }
 
@@ -41,11 +41,22 @@ public class UserDatabaseServiceImpl implements UserDatabaseService {
 
     @Override
     public boolean delete(User user) {
-        return userMapper.delete(user);
+        return this.exists(user.getLogin()) && userMapper.delete(user);
     }
 
     @Override
     public boolean deleteAll() {
         return userMapper.deleteAll();
     }
+
+    @Override
+    public boolean exists(String login) {
+        return userMapper.exists(login);
+    }
+
+    @Override
+    public boolean notExists(String login) {
+        return !userMapper.exists(login);
+    }
+
 }

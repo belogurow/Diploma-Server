@@ -14,6 +14,7 @@ import ru.belogurow.socialnetworkserver.users.domain.User;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -29,10 +30,18 @@ public class UserDatabaseServiceTest {
 
     @Test
     public void insert() {
-        User user = UserFamilyCreator.createUser("insertUser");
-        boolean insertResult = userDatabaseService.insert(user);
+        User user = UserFamilyCreator.createUser("insert");
 
-        assertTrue(insertResult);
+        assertTrue(userDatabaseService.insert(user));
+    }
+
+    @Test
+    public void insertFail() {
+        User user1 = UserFamilyCreator.createUser("insertFail");
+        User user2 = UserFamilyCreator.createUser(user1.getName());
+
+        assertTrue(userDatabaseService.insert(user1));
+        assertFalse(userDatabaseService.insert(user2));
     }
 
 
@@ -43,6 +52,13 @@ public class UserDatabaseServiceTest {
 
         user.setName("updateUser1");
         assertTrue(userDatabaseService.update(user));
+    }
+
+    @Test
+    public void updateFail() {
+        User user = UserFamilyCreator.createUser("updateFail");
+
+        assertFalse(userDatabaseService.update(user));
     }
 
     @Test
@@ -83,6 +99,13 @@ public class UserDatabaseServiceTest {
     }
 
     @Test
+    public void deleteFail() {
+        User user = UserFamilyCreator.createUser("updateFail");
+
+        assertFalse(userDatabaseService.delete(user));
+    }
+
+    @Test
     public void deleteAll() {
         User user1 = UserFamilyCreator.createUser("findAll1");
         User user2 = UserFamilyCreator.createUser("findAll2");
@@ -95,5 +118,31 @@ public class UserDatabaseServiceTest {
         assertTrue(userDatabaseService.findAll().size() == 3);
         assertTrue(userDatabaseService.deleteAll());
         assertTrue(userDatabaseService.findAll().isEmpty());
+    }
+
+    @Test
+    public void exists() {
+        User user = UserFamilyCreator.createUser("exists");
+
+        assertTrue(userDatabaseService.insert(user));
+        assertTrue(userDatabaseService.exists(user.getLogin()));
+    }
+
+    @Test
+    public void existsFail() {
+        assertFalse(userDatabaseService.exists("existsFail"));
+    }
+
+    @Test
+    public void notExists() {
+        assertTrue(userDatabaseService.notExists("notExists"));
+    }
+
+    @Test
+    public void notExistsFail() {
+        User user = UserFamilyCreator.createUser("exists");
+
+        assertTrue(userDatabaseService.insert(user));
+        assertFalse(userDatabaseService.notExists(user.getLogin()));
     }
 }
