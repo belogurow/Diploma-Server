@@ -35,12 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {SocialNetworkServerApplication.class})
 @ActiveProfiles(profiles = "test")
 @Transactional
+//@WebMvcTest(controllers = {UserController.class})
 public class UserControllerTest {
 
     /**
      * <a href=https://memorynotfound.com/unit-test-spring-mvc-rest-service-junit-mockito/>Mockito rest service</a>
      */
 
+//    @Autowired
     private MockMvc mockMvc;
 
     @Mock

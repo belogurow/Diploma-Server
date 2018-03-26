@@ -42,11 +42,11 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public ResponseEntity getAll() {
+    public List<User> getAll() {
         LOGGER.info("getAll()");
 
         List<User> users = userDatabaseService.findAll();
-        return ResponseEntity.ok(users);
+        return users;
     }
 
     @Override

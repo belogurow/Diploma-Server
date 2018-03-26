@@ -10,7 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
  * @author alexbelogurow
  */
 @ComponentScan(basePackages = {"ru.belogurow.socialnetworkserver.configs",
-		"ru.belogurow.socialnetworkserver.users"})
+		"ru.belogurow.socialnetworkserver.users",
+		"ru.belogurow.socialnetworkserver.users.dao"})
 
 @MapperScan(value = "ru.belogurow.socialnetworkserver.*.mybatis.mapper")
 @SpringBootApplication

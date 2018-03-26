@@ -3,6 +3,7 @@ package ru.belogurow.socialnetworkserver.users.api.controllers;
 import org.springframework.http.ResponseEntity;
 import ru.belogurow.socialnetworkserver.users.domain.User;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,7 +12,7 @@ import java.util.UUID;
 public interface UserController {
     ResponseEntity getUser(UUID id);
 
-    ResponseEntity getAll();
+    List<User> getAll();
 
     ResponseEntity insertUser(User user);
 
