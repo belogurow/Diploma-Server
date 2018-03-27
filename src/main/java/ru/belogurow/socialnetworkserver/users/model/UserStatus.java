@@ -1,4 +1,4 @@
-package ru.belogurow.socialnetworkserver.users.domain;
+package ru.belogurow.socialnetworkserver.users.model;
 
 /**
  * @author alexbelogurow

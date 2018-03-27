@@ -5,14 +5,31 @@ spring:
     url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server}
     username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
     password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma-server}
+  jpa:
+    properties:
+      hibernate:
+#        show_sql: true
+#        use_sql_comments: true
+#        format_sql: true
 
-
+        temp:
+          use_jdbc_metadata_defaults: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+#
+#    hibernate:
+#      ddl-auto: create
+#    generate-ddl: true
 
   liquibase:
     change-log: classpath:dbconfig/liquibase/liquibaseConfig.xml
     check-change-log-location: true
     drop-first: ${LIQUIBASE_DROP_FIRST:false}
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
 #  jpa:
 #    properties:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -31,4 +48,4 @@ spring:
     username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma-server}
     password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma-server}
   liquibase:
-    drop-first: false
+    drop-first: true
