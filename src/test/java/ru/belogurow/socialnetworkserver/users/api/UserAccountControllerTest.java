@@ -13,12 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import ru.belogurow.socialnetworkserver.SocialNetworkServerApplication;
 import ru.belogurow.socialnetworkserver.common.familyCreators.UserFamilyCreator;
-import ru.belogurow.socialnetworkserver.users.model.User;
+import ru.belogurow.socialnetworkserver.users.model.UserAccount;
+import ru.belogurow.socialnetworkserver.users.model.UserRole;
 import ru.belogurow.socialnetworkserver.users.model.UserStatus;
-import ru.belogurow.socialnetworkserver.users.service.impl.UserDatabaseServiceImpl;
+import ru.belogurow.socialnetworkserver.users.service.impl.UserAccountDatabaseServiceImpl;
 
 import java.util.*;
 
@@ -31,9 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SocialNetworkServerApplication.class})
 @ActiveProfiles(profiles = "test")
-@Transactional
-//@WebMvcTest(controllers = {UserController.class})
-public class UserControllerTest {
+public class UserAccountControllerTest {
 
     /**
      * <a href=https://memorynotfound.com/unit-test-spring-mvc-rest-service-junit-mockito/>Mockito rest service</a>
@@ -42,23 +40,23 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private UserDatabaseServiceImpl userDatabaseService;
+    private UserAccountDatabaseServiceImpl userDatabaseService;
 
     @InjectMocks
-    private UserController userController;
+    private UserAccountController userAccountController;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         mockMvc = MockMvcBuilders
-                .standaloneSetup(userController)
+                .standaloneSetup(userAccountController)
                 .build();
     }
 
     @Test
     public void findUserByIdOk() throws Exception {
-        User user = UserFamilyCreator.createUserWithId("getUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("getUser");
 
 
         when(userDatabaseService.findById(user.getId())).thenReturn(Optional.of(user));
@@ -68,9 +66,9 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(user.getId().toString())))
-                .andExpect(jsonPath("$.login", is("getUser")))
+                .andExpect(jsonPath("$.username", is("getUser")))
                 .andExpect(jsonPath("$.name", is("getUser")))
-                .andExpect(jsonPath("$.userStatus", is(UserStatus.USER.toString())));
+                .andExpect(jsonPath("$.userRole", is(UserRole.USER.toString())));
 
 
         verify(userDatabaseService, times(1))
@@ -95,7 +93,7 @@ public class UserControllerTest {
 
     @Test
     public void getAllOk() throws Exception {
-        List<User> users = Arrays.asList(
+        List<UserAccount> users = Arrays.asList(
                 UserFamilyCreator.createUserWithId("getAll1"),
                 UserFamilyCreator.createUserWithId("getAll2"));
 
@@ -107,9 +105,9 @@ public class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(users.get(0).getId().toString())))
-                .andExpect(jsonPath("$[0].login", is(users.get(0).getName())))
+                .andExpect(jsonPath("$[0].name", is(users.get(0).getName())))
                 .andExpect(jsonPath("$[1].id", is(users.get(1).getId().toString())))
-                .andExpect(jsonPath("$[1].login", is(users.get(1).getName())));
+                .andExpect(jsonPath("$[1].username", is(users.get(1).getUsername())));
 
         verify(userDatabaseService, times(1))
                 .findAll();
@@ -130,13 +128,14 @@ public class UserControllerTest {
     }
 
     @Test
-    public void saveUserCreated() throws Exception {
-        User user = UserFamilyCreator.createUser("saveUser");
+    public void loginUserCreated() throws Exception {
+        UserAccount user = UserFamilyCreator.createUser("saveUser");
 
-        User userResult = UserFamilyCreator.createUserWithId(user.getLogin());
+        UserAccount userResult = UserFamilyCreator.createUserWithId(user.getUsername());
+        userResult.setUserStatus(UserStatus.ONLINE);
 
-        when(userDatabaseService.save(user)).thenReturn(userResult);
-        when(userDatabaseService.existsByLogin(user.getLogin())).thenReturn(false);
+        when(userDatabaseService.login(user)).thenReturn(Optional.of(userResult));
+//        when(userDatabaseService.existsByUsername(user.getUsername())).thenReturn(false);
 
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -146,16 +145,19 @@ public class UserControllerTest {
                 .andExpect(header().string("location", is("http://localhost/users/" + userResult.getId())));
 
         verify(userDatabaseService, times(1))
-                .save(user);
-        verify(userDatabaseService, times(1))
-                .existsByLogin(user.getLogin());
+                .login(user);
+        verifyNoMoreInteractions(userDatabaseService);
+//        verify(userAccountSe)
+//        verify(userDatabaseService, times(1))
+//                .existsByUsername(user.getUsername());
     }
 
     @Test
     public void saveUserConflict() throws Exception {
-        User user = UserFamilyCreator.createUser("saveUser");
+        UserAccount user = UserFamilyCreator.createUser("saveUser");
 
-        when(userDatabaseService.existsByLogin(user.getLogin())).thenReturn(true);
+        when(userDatabaseService.login(user)).thenReturn(Optional.empty());
+//        when(userDatabaseService.existsByUsername(user.getUsername())).thenReturn(true);
 
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -164,16 +166,16 @@ public class UserControllerTest {
                 .andExpect(status().isConflict());
 
         verify(userDatabaseService, times(1))
-                .existsByLogin(user.getLogin());
+                .login(user);
         verifyNoMoreInteractions(userDatabaseService);
     }
 
     @Test
     public void updateUserConflict() throws Exception {
-        User user = UserFamilyCreator.createUserWithId("updateUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("updateUser");
 
         when(userDatabaseService.existsById(user.getId())).thenReturn(true);
-        when(userDatabaseService.existsByLogin(user.getLogin())).thenReturn(true);
+        when(userDatabaseService.existsByUsername(user.getUsername())).thenReturn(true);
 
         mockMvc.perform(put("/users/{id}", user.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -184,15 +186,15 @@ public class UserControllerTest {
         verify(userDatabaseService, times(1))
                 .existsById(user.getId());
         verify(userDatabaseService, times(1))
-                .existsByLogin(user.getLogin());
+                .existsByUsername(user.getUsername());
     }
 
     @Test
     public void updateUserNoContent() throws Exception {
-        User user = UserFamilyCreator.createUserWithId("updateUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("updateUser");
 
         when(userDatabaseService.existsById(user.getId())).thenReturn(true);
-        when(userDatabaseService.existsByLogin(user.getLogin())).thenReturn(false);
+        when(userDatabaseService.existsByUsername(user.getUsername())).thenReturn(false);
 
         mockMvc.perform(put("/users/{id}", user.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -203,12 +205,12 @@ public class UserControllerTest {
         verify(userDatabaseService, times(1))
                 .existsById(user.getId());
         verify(userDatabaseService, times(1))
-                .existsByLogin(user.getLogin());
+                .existsByUsername(user.getUsername());
     }
 
     @Test
     public void updateUserNotFound() throws Exception {
-        User user = UserFamilyCreator.createUserWithId("updateUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("updateUser");
 
         when(userDatabaseService.existsById(user.getId())).thenReturn(false);
 
@@ -225,7 +227,7 @@ public class UserControllerTest {
 
     @Test
     public void deleteUserNoContent() throws Exception{
-        User user = UserFamilyCreator.createUserWithId("deleteUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("deleteUser");
 
         when(userDatabaseService.findById(user.getId())).thenReturn(Optional.of(user));
 
@@ -241,7 +243,7 @@ public class UserControllerTest {
 
     @Test
     public void deleteUserNotFound() throws Exception{
-        User user = UserFamilyCreator.createUserWithId("deleteUser");
+        UserAccount user = UserFamilyCreator.createUserWithId("deleteUser");
 
         when(userDatabaseService.findById(user.getId())).thenReturn(Optional.empty());
 

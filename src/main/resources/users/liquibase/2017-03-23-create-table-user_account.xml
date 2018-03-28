@@ -3,19 +3,19 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
 
-    <changeSet id="create-table-user" author="belogurow">
+    <changeSet id="create-table-user_account" author="belogurow">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="USER"/>
+                <tableExists tableName="user_account"/>
             </not>
         </preConditions>
 
-        <createTable tableName="user">
+        <createTable tableName="user_account">
             <column name="id" type="UUID">
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="login" type="VARCHAR(100)">
+            <column name="username" type="VARCHAR(100)">
                 <constraints nullable="false" unique="true"/>
             </column>
 
@@ -27,8 +27,12 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="USER_STATUS" type="VARCHAR(100)">
+            <column name="user_role" type="VARCHAR(100)">
                 <constraints nullable="false"/>
+            </column>
+
+            <column name="user_status" type="VARCHAR(100)">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
