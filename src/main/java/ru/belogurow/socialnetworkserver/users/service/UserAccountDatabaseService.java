@@ -18,6 +18,8 @@ public interface UserAccountDatabaseService {
 
     Optional<UserAccount> login(UserAccount user);
 
+    Optional<UserAccount> findByUsername(String username);
+
     List<UserAccount> findAll();
 
     void deleteById(UUID id);

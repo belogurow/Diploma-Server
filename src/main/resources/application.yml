@@ -5,6 +5,9 @@ spring:
     url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server}
     username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
     password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma-server}
+
+  profiles:
+    active: https
   jpa:
     properties:
       hibernate:
@@ -30,6 +33,11 @@ logging:
     org:
       hibernate:
         SQL: debug
+server:
+  ssl:
+    key-store: classpath:tomcat.keystore
+    key-store-password: password
+    key-password: password
 #  jpa:
 #    properties:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect

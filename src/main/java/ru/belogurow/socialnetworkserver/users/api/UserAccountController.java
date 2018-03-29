@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.belogurow.socialnetworkserver.users.model.UserAccount;
+import ru.belogurow.socialnetworkserver.users.model.UserStatus;
 import ru.belogurow.socialnetworkserver.users.service.UserAccountDatabaseService;
 
 import java.util.List;
@@ -53,16 +54,54 @@ public class UserAccountController {
     public ResponseEntity login(@RequestBody UserAccount user) {
         LOGGER.info("login({})", user);
 
-        Optional<UserAccount> resultUser = userAccountDatabaseService.login(user);
-        return resultUser
-                .map(userAccount -> ResponseEntity
-                        .created(ServletUriComponentsBuilder
-                                .fromCurrentRequest()
-                                .path("/{id}")
-                                .buildAndExpand(userAccount.getId())
-                                .toUri())
-                        .build())
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+        switch (user.getUserStatus()) {
+            // Registration process
+            case REGISTRATION:
+                if (userAccountDatabaseService.existsByUsername(user.getUsername())) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                } else {
+                    Optional<UserAccount> resultUser = userAccountDatabaseService.login(user);
+                    return resultUser
+                            .map(userAccount -> ResponseEntity
+                                    .created(ServletUriComponentsBuilder
+                                            .fromCurrentRequest()
+                                            .path("/{id}")
+                                            .buildAndExpand(userAccount.getId())
+                                            .toUri())
+                                    .build())
+                            .orElseGet(() -> ResponseEntity.unprocessableEntity().build());
+                }
+            case ONLINE:
+                // If current user is online - error
+                return ResponseEntity.notFound().build();
+            case OFFLINE:
+                // If current user is offline, check that user from db exists and not online
+                if (userAccountDatabaseService.existsByUsername(user.getUsername())) {
+
+                    Optional<UserAccount> resultUser = userAccountDatabaseService.findByUsername(user.getUsername());
+
+                    if (resultUser.isPresent()) {
+                        // check password
+                        if (!resultUser.get().getUserStatus().equals(UserStatus.ONLINE)) {
+                            if (resultUser.get().getPassword().contentEquals(user.getPassword())) {
+                                resultUser.get().setUserStatus(UserStatus.ONLINE);
+                                userAccountDatabaseService.update(resultUser.get());
+                                return ResponseEntity.ok(resultUser.get());
+                            } else {
+                                return ResponseEntity.notFound().build();
+                            }
+                        } else {
+                            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                        }
+                    } else {
+                        return ResponseEntity.notFound().build();
+                    }
+                }
+                return ResponseEntity.notFound().build();
+                default:
+                    return ResponseEntity.notFound().build();
+        }
+
     }
 
 //    @RequestMapping(value = "/users", method = RequestMethod.POST)
@@ -116,6 +155,6 @@ public class UserAccountController {
         LOGGER.info("deleteAll()");
 
         userAccountDatabaseService.deleteAll();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

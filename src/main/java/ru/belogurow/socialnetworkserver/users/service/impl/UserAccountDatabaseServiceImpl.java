@@ -27,7 +27,11 @@ public class UserAccountDatabaseServiceImpl implements UserAccountDatabaseServic
 
     @Override
     public UserAccount save(UserAccount user) {
-        return userAccountRepository.saveAndFlush(user);
+//        try {
+            return userAccountRepository.saveAndFlush(user);
+//        } catch () {
+//            throw new USER_EXCEPTION()
+//        }
     }
 
     @Override
@@ -42,12 +46,12 @@ public class UserAccountDatabaseServiceImpl implements UserAccountDatabaseServic
 
     @Override
     public Optional<UserAccount> login(UserAccount user) {
-        if (userAccountRepository.existsByUsername(user.getUsername())) {
-            return Optional.empty();
-        }
+//        if (userAccountRepository.existsByUsername(user.getUsername())) {
+//            return Optional.empty();
+//        }
 
         user.setUserStatus(UserStatus.ONLINE);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(this.save(user));
     }
 
@@ -77,4 +81,12 @@ public class UserAccountDatabaseServiceImpl implements UserAccountDatabaseServic
         userAccountRepository.deleteAll();
     }
 
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        if (this.existsByUsername(username)) {
+            return Optional.of(userAccountRepository.findByUsername(username));
+        }
+
+        return Optional.empty();
+    }
 }
