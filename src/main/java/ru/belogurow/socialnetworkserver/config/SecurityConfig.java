@@ -19,7 +19,7 @@
 //
 
 //    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//    protected void configure(AuthenticationManagerBuilder auth) throws CustomException {
 //        super.configure(auth);
 //
 //        auth.jdbcAuthentication()
@@ -30,17 +30,17 @@
 //    }
 //
 //    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
+//    protected void configure(HttpSecurity http) throws CustomException {
 //        http.authorizeRequests().anyRequest()
 //                .hasAnyRole(
 //                        UserRole.ROLE_ADMIN.toString(),
 //                        UserRole.ROLE_USER.toString())
 //                .and()
-//                .authorizeRequests().antMatchers("/login**").permitAll()
+//                .authorizeRequests().antMatchers("/loginDeprecated**").permitAll()
 //                .and()
-//                .formLogin().loginPage("/login").loginProcessingUrl("/loginAction").permitAll()
+//                .formLogin().loginPage("/loginDeprecated").loginProcessingUrl("/loginAction").permitAll()
 //                .and()
-//                .logout().logoutSuccessUrl("/login").permitAll()
+//                .logout().logoutSuccessUrl("/loginDeprecated").permitAll()
 //                .and()
 //                .csrf().disable();
 //    }

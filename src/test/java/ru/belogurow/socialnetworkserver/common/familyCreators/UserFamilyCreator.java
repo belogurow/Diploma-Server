@@ -1,14 +1,14 @@
 package ru.belogurow.socialnetworkserver.common.familyCreators;
 
-import ru.belogurow.socialnetworkserver.users.model.UserAccount;
+import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.model.UserRole;
 
 import java.util.UUID;
 
 public class UserFamilyCreator {
 
-    public static UserAccount createUser(String name) {
-        UserAccount user = new UserAccount();
+    public static User createUser(String name) {
+        User user = new User();
 
         user.setUsername(name);
         user.setName(name);
@@ -18,8 +18,8 @@ public class UserFamilyCreator {
         return user;
     }
 
-    public static UserAccount createUserWithId(String name) {
-        UserAccount user = createUser(name);
+    public static User createUserWithId(String name) {
+        User user = createUser(name);
         user.setId(UUID.randomUUID());
 
         return user;

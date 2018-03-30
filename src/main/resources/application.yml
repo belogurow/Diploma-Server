@@ -2,9 +2,9 @@ spring:
   datasource:
     name: diploma-server
     driver-class-name: org.postgresql.Driver
-    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server}
-    username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
-    password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma-server}
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma_server}
+    username: ${SOCIAL_NETWORK_DB_USERNAME:diploma_server}
+    password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma_server}
 
   profiles:
     active: https
@@ -35,9 +35,12 @@ logging:
         SQL: debug
 server:
   ssl:
-    key-store: classpath:tomcat.keystore
+    key-store: classpath:keystore.p12
     key-store-password: password
     key-password: password
+    key-alias: tomcat
+    key-store-type: PKCS12
+  port: 8080
 #  jpa:
 #    properties:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -52,8 +55,8 @@ spring:
   datasource:
     name: diploma-server-test
     driver-class-name: org.postgresql.Driver
-    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma-server-test}
-    username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma-server}
-    password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma-server}
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma_server_test}
+    username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma_server}
+    password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma_server}
   liquibase:
-    drop-first: true
+    drop-first: false
