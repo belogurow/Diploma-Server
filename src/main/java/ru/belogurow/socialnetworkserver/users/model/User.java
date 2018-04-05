@@ -42,6 +42,11 @@ public class User implements Serializable {
     @Column(name = "user_role")
     private UserRole userRole;
 
+//    @OneToOne(mappedBy = "user",
+//            fetch = FetchType.LAZY,
+//            targetEntity = UserProfile.class)
+//    private UserProfile userProfile;
+
 //    @Column(name = "user_status")
 //    private UserStatus userStatus;
 
@@ -95,6 +100,15 @@ public class User implements Serializable {
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
+
+
+//    public UserProfile getUserProfile() {
+//        return userProfile;
+//    }
+//
+//    public void setUserProfile(UserProfile userProfile) {
+//        this.userProfile = userProfile;
+//    }
 
     @Override
     public String toString() {

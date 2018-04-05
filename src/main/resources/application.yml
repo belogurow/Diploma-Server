@@ -59,4 +59,4 @@ spring:
     username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma_server}
     password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma_server}
   liquibase:
-    drop-first: false
+    drop-first: true

@@ -1,0 +1,53 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="create-table-user_profile" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_profile"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="user_profile">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="profession" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-primary-key-user_profile" author="belogurow">
+        <preConditions>
+            <not>
+                <primaryKeyExists tableName="user_profile"/>
+            </not>
+        </preConditions>
+
+        <addPrimaryKey tableName="user_profile"
+                       columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-fk_user_profile-to-user_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_user_profile"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="user_profile"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_user_profile"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

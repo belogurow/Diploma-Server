@@ -4,7 +4,8 @@ public enum ErrorCode {
     UNDEFINED("Undefined exception ", 0),
     LOGIN_EXISTS("This login is already exists", 1),
     LOGIN_INCORRECT("Login incorrect", 2),
-    PASSWORD_INCORRECT("Password incorrect", 3);
+    PASSWORD_INCORRECT("Password incorrect", 3),
+    USER_IS_NOT_FOUND("User is not found", 4);
 
     private final String description;
     private final int errorNumber;

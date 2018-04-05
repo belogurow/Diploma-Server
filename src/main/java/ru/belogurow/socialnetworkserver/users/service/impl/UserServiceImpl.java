@@ -34,7 +34,8 @@ public class UserServiceImpl implements UserService {
         // TODO: 30.03.2018 VALIDATE FIELDS?
 
         if (userFromDB.isPresent()) {
-            if (user.getPassword().contentEquals(userFromDB.get().getPassword())) {
+            if (passwordEncoder.matches(user.getPassword(), userFromDB.get().getPassword())) {
+//            if (user.getPassword().contentEquals(userFromDB.get().getPassword())) {
                 // Login Success
                 return userFromDB.get();
 
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.LOGIN_EXISTS);
         } else {
             // Create new user
-
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setUserRole(UserRole.USER);
             return userRepository.save(user);
         }
