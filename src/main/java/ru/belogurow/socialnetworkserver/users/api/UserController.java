@@ -10,7 +10,6 @@ import ru.belogurow.socialnetworkserver.common.exception.CustomException;
 import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
-import java.util.List;
 import java.util.UUID;
 //import ru.belogurow.socialnetworkserver.users.dao.UserService;
 
@@ -51,15 +50,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public ResponseEntity getAll() {
-        LOGGER.info("getAll()");
+    public ResponseEntity findAll() {
+        LOGGER.info("findAll()");
 
-        List<User> users = userService.findAll();
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.findAll());
+//        List<User> users = userService.findAll();
+//        if (users.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        return ResponseEntity.ok(users);
     }
 
 

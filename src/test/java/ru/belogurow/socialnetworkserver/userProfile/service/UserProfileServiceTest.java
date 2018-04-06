@@ -1,10 +1,10 @@
 package ru.belogurow.socialnetworkserver.userProfile.service;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.belogurow.socialnetworkserver.SocialNetworkServerApplication;
@@ -16,15 +16,16 @@ import ru.belogurow.socialnetworkserver.users.model.UserProfile;
 import ru.belogurow.socialnetworkserver.users.service.UserProfileService;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
+import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {SocialNetworkServerApplication.class})
 @ActiveProfiles(profiles = "test")
-//@Transactional
+@Transactional
 public class UserProfileServiceTest {
 
     @Autowired
@@ -43,17 +44,17 @@ public class UserProfileServiceTest {
         assertNotNull(userSaveResult.getId());
         assertEquals(user.getUsername(), userSaveResult.getUsername());
 
-        UserProfile userProfile = UserFamilyCreator.createUserProfile(userSaveResult);
+        UserProfile userProfile = UserFamilyCreator.createUserProfile();
 
         UserProfile profileSaveResult = userProfileService.save(user.getId(), userProfile);
 
         assertNotNull(profileSaveResult.getId());
-        assertEquals(userSaveResult, profileSaveResult.getUser());
+        assertEquals(userSaveResult.getId(), profileSaveResult.getUserId());
     }
 
     @Test
     public void saveUserNotFound() {
-        UserProfile userProfile = UserFamilyCreator.createUserProfile(null);
+        UserProfile userProfile = UserFamilyCreator.createUserProfile();
 
         try {
             UserProfile profileSaveResult = userProfileService.save(UUID.randomUUID(), userProfile);
@@ -63,9 +64,22 @@ public class UserProfileServiceTest {
     }
 
     @Test
-    @Ignore
-    // TODO: 05.04.2018
-    // MUST CONFLICT WITH UNIQUE (id, user_id)
+    public void findUserProfileByUserId() throws CustomException {
+        User user = UserFamilyCreator.createUser("save");
+        User userSaveResult = userService.registration(user);
+
+        assertNotNull(userSaveResult.getId());
+
+        UserProfile userProfile = UserFamilyCreator.createUserProfile();
+        UserProfile profileSaveResult = userProfileService.save(user.getId(), userProfile);
+
+        Optional<UserProfile> profileGetResult = userProfileService.getByUserId(userSaveResult.getId());
+        assertTrue(profileGetResult.isPresent());
+        assertEquals(profileSaveResult, profileGetResult.get());
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    // MUST CONFLICT WITH UNIQUE (user_id)
     public void saveTest() throws CustomException {
         User user = UserFamilyCreator.createUser("saveTest");
 
@@ -74,14 +88,14 @@ public class UserProfileServiceTest {
         assertNotNull(userSaveResult.getId());
         assertEquals(user.getUsername(), userSaveResult.getUsername());
 
-        UserProfile userProfile1 = UserFamilyCreator.createUserProfile(userSaveResult);
+        UserProfile userProfile1 = UserFamilyCreator.createUserProfile();
 
         UserProfile profileSaveResult1 = userProfileService.save(user.getId(), userProfile1);
 
         assertNotNull(profileSaveResult1.getId());
-        assertEquals(userSaveResult, profileSaveResult1.getUser());
+        assertEquals(userSaveResult.getId(), profileSaveResult1.getUserId());
 
-        UserProfile userProfile2 = UserFamilyCreator.createUserProfile(userSaveResult);
+        UserProfile userProfile2 = UserFamilyCreator.createUserProfile();
 
         UserProfile profileSaveResult2 = userProfileService.save(user.getId(), userProfile2);
     }

@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.belogurow.socialnetworkserver.common.exception.CustomException;
 import ru.belogurow.socialnetworkserver.common.exception.ErrorCode;
-import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.model.UserProfile;
 import ru.belogurow.socialnetworkserver.users.repository.UserProfileRepository;
 import ru.belogurow.socialnetworkserver.users.service.UserProfileService;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,13 +24,19 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile save(UUID userId, UserProfile userProfile) throws CustomException {
-        Optional<User> user = userService.findById(userId);
-
-        // TODO: 05.04.2018 USER PROFILE FOR THIS USER DOES NOT EXISTS
-
-        if (user.isPresent()) {
-            userProfile.setUser(user.get());
-            return userProfileRepository.save(userProfile);
+//        Optional<User> user = userService.findById(userId);
+//
+//        // TODO: 05.04.2018 USER PROFILE FOR THIS USER DOES NOT EXISTS
+//
+//        if (user.isPresent()) {
+//            userProfile.setUser(user.get());
+//            return userProfileRepository.save(userProfile);
+//        } else {
+//            throw new CustomException(ErrorCode.USER_IS_NOT_FOUND);
+//        }
+        if (userService.existsById(userId)) {
+            userProfile.setUserId(userId);
+            return userProfileRepository.saveAndFlush(userProfile);
         } else {
             throw new CustomException(ErrorCode.USER_IS_NOT_FOUND);
         }
@@ -39,5 +45,10 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     public Optional<UserProfile> getByUserId(UUID userId) {
         return userProfileRepository.getByUserId(userId);
+    }
+
+    @Override
+    public List<UserProfile> findAll() {
+        return userProfileRepository.findAll();
     }
 }

@@ -26,11 +26,11 @@ public class UserFamilyCreator {
         return user;
     }
 
-    public static UserProfile createUserProfile(User user) {
+    public static UserProfile createUserProfile() {
         UserProfile userProfile = new UserProfile();
 
         userProfile.setProfession("someProfession");
-        userProfile.setUser(user);
+//        userProfile.setId(user.getId());
 
         return userProfile;
     }
