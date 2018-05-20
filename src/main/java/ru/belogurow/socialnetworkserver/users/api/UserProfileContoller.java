@@ -14,7 +14,6 @@ public class UserProfileContoller {
 
     private static Logger LOGGER = LoggerFactory.getLogger(UserProfileContoller.class);
 
-    @Autowired
     private UserProfileService userProfileService;
 
 //    @RequestMapping(value = "/user-profile", method = RequestMethod.GET)
@@ -31,5 +30,10 @@ public class UserProfileContoller {
         LOGGER.info("findAll()");
 
         return ResponseEntity.ok(userProfileService.findAll());
+    }
+
+    @Autowired
+    public void setUserProfileService(UserProfileService userProfileService) {
+        this.userProfileService = userProfileService;
     }
 }

@@ -23,7 +23,6 @@ public class UserController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -170,5 +169,10 @@ public class UserController {
 
         userService.deleteAll();
         return ResponseEntity.ok().build();
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }
