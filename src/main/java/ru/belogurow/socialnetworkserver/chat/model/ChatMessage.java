@@ -5,21 +5,22 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Date;
 
-public class Message {
+
+public class ChatMessage {
 
     private String id;
     private String authorId;
     private Date date;
     private String text;
 
-    public Message(String id, String authorId, Date date, String text) {
+    public ChatMessage(String id, String authorId, Date date, String text) {
         this.id = id;
         this.authorId = authorId;
         this.date = date;
         this.text = text;
     }
 
-    public Message() {
+    public ChatMessage() {
     }
 
     public String getId() {
@@ -60,13 +61,13 @@ public class Message {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        Message message = (Message) o;
+        ChatMessage chatMessage = (ChatMessage) o;
 
         return new EqualsBuilder()
-                .append(id, message.id)
-                .append(authorId, message.authorId)
-                .append(date, message.date)
-                .append(text, message.text)
+                .append(id, chatMessage.id)
+                .append(authorId, chatMessage.authorId)
+                .append(date, chatMessage.date)
+                .append(text, chatMessage.text)
                 .isEquals();
     }
 

@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="create-table-file_entity" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="file_entity"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="file_entity">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="data" type="BLOB">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="update_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="file_type" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

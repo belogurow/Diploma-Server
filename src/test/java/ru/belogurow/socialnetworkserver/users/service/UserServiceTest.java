@@ -204,7 +204,7 @@ public class UserServiceTest {
 
         List<User> users = userService.findAll();
 
-        assertEquals(3, userService.findAll().size());
+        assertEquals(3, users.size());
         assertTrue(users.containsAll(Arrays.asList(user1, user2, user3)));
 
     }

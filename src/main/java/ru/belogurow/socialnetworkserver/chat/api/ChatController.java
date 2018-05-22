@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RestController;
-import ru.belogurow.socialnetworkserver.chat.model.Message;
+import ru.belogurow.socialnetworkserver.chat.model.ChatMessage;
 
 import java.util.Date;
 import java.util.UUID;
@@ -17,18 +17,18 @@ public class ChatController {
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public Message message(String textMessage) {
-        LOGGER.info("message({})", textMessage);
+    public ChatMessage message(String textMessage) {
+        LOGGER.info("chatMessage({})", textMessage);
 
-        Message message = new Message();
+        ChatMessage chatMessage = new ChatMessage();
         // TODO: 20.05.2018 SAVE TO DATASOURCE
         // TODO: 20.05.2018 MOVE TO SERVICE
         // TODO: 20.05.2018 SET AUTHOR ID
-//         message.setAuthorId();
-        message.setId(UUID.randomUUID().toString());
-        message.setDate(new Date());
-        message.setText(textMessage);
+//         chatMessage.setAuthorId();
+        chatMessage.setId(UUID.randomUUID().toString());
+        chatMessage.setDate(new Date());
+        chatMessage.setText(textMessage);
 
-        return message;
+        return chatMessage;
     }
 }
