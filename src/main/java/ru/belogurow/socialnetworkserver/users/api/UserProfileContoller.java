@@ -20,7 +20,7 @@ public class UserProfileContoller {
 //    public ResponseEntity findUserProfileByUserId(@RequestParam("userId") UUID userId) {
 //        LOGGER.info("findUserProfileByUserId({})", userId);
 //
-//        return userProfileService.getByUserId(userId)
+//        return userProfileService.findAllByUserId(userId)
 //                .map(ResponseEntity::ok)
 //                .orElseGet(() -> ResponseEntity.notFound().build());
 //    }

@@ -32,4 +32,118 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="create-table-chat_room" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="chat_room"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="chat_room">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="first_user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="second_user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-fk_first_user_id-to-user_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_first_user_id"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="chat_room"
+                                 baseColumnNames="first_user_id"
+                                 constraintName="fk_first_user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="create-fk_second_user_id-to-user_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_second_user_id"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="chat_room"
+                                 baseColumnNames="second_user_id"
+                                 constraintName="fk_second_user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="create-table-chat_message" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="chat_message"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="chat_message">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="author_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="chat_room_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="text" type="VARCHAR(1000)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-fk_chat_message-to-author_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_author_id"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="chat_message"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_author_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="create-fk_chat_room_id-to-chat_room_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_chat_room_id"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="chat_message"
+                                 baseColumnNames="chat_room_id"
+                                 constraintName="fk_chat_room_id"
+                                 referencedTableName="chat_room"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+
 </databaseChangeLog>
