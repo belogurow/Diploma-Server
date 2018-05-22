@@ -31,6 +31,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    public Optional<ChatRoom> findByUserIds(UUID userId1, UUID userId2) {
+        return chatRoomRepository.findByUserIds(userId1, userId2);
+    }
+
+    @Override
     public List<ChatRoom> findAllByUserId(UUID userId) {
         return chatRoomRepository.findAllByUserId(userId);
     }

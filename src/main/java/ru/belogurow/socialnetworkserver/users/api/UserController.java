@@ -11,7 +11,6 @@ import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
 import java.util.UUID;
-//import ru.belogurow.socialnetworkserver.users.dao.UserService;
 
 
 /**

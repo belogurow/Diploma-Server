@@ -14,6 +14,8 @@ public interface ChatRoomService {
 
     List<ChatRoom> findAll();
 
+    Optional<ChatRoom> findByUserIds(UUID userId1, UUID userId2);
+
     List<ChatRoom> findAllByUserId(UUID userId);
 
     void deleteAll();
