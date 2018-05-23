@@ -23,7 +23,6 @@ public class ChatController {
     private static Logger LOGGER = LoggerFactory.getLogger(ChatController.class);
 
     private ChatRoomService chatRoomService;
-
     private ChatMessageService chatMessageService;
 
     @RequestMapping(value = "/chat", method = RequestMethod.POST)
@@ -41,13 +40,33 @@ public class ChatController {
         return ResponseEntity.ok(chatRoomService.findAllByUserId(userId));
     }
 
+    @RequestMapping(value = "/chat/{chatId}/messages", method = RequestMethod.GET)
+    public ResponseEntity getAllMessagesByChatId(@PathVariable("chatId") UUID chatId) {
+        LOGGER.info("getAllMessagesByChatId({})", chatId);
 
-    @MessageMapping("/chat/{chatId}.{authorId}")
-    @SendTo("/chat/{chatId}/messages")
+        return ResponseEntity.ok(chatMessageService.getAllMessagesByChatRoomId(chatId));
+    }
+
+    @Deprecated
+    @MessageMapping("/chatRoom/{id}")
+    @SendTo("/topic/messages/{id}")
+    public ChatMessage message(@DestinationVariable("id") UUID id, String textMessage) {
+        LOGGER.info("message({}, {})", id, textMessage);
+        LOGGER.info("message({})", textMessage);
+
+        ChatMessage message = new ChatMessage();
+        message.setId(UUID.randomUUID());
+        message.setDate(new Date());
+        message.setText(textMessage + "DEPRECATED");
+        return message;
+    }
+
+    @MessageMapping("/chatRoom/{chatId}/{authorId}")
+    @SendTo("/topic/chatRoom/{chatId}/messages")
     public ChatMessage sendMessage(@DestinationVariable("chatId") String chatId,
                                    @DestinationVariable("authorId") String authorId,
                                    String textMessage) {
-        LOGGER.info("sendMessage({}) to chat {} from author {}", textMessage, chatId, authorId);
+        LOGGER.info("sendMessage({}, {}, {})", chatId, authorId, textMessage);
 
 
         ChatMessage chatMessage = new ChatMessage();
