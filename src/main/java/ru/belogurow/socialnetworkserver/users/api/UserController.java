@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.belogurow.socialnetworkserver.common.exception.CustomException;
+import ru.belogurow.socialnetworkserver.users.converter.ConvertUser2UserDto;
 import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -22,20 +24,21 @@ public class UserController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
+    private ConvertUser2UserDto convertUser2UserDto;
     private UserService userService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody User user) throws CustomException {
         LOGGER.info("registration({})", user);
 
-        return ResponseEntity.ok(userService.registration(user));
+        return ResponseEntity.ok(convertUser2UserDto.convert(userService.registration(user)));
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user) throws CustomException {
         LOGGER.info("login({})", user);
 
-        return ResponseEntity.ok(userService.login(user));
+        return ResponseEntity.ok(convertUser2UserDto.convert(userService.login(user)));
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
@@ -43,7 +46,7 @@ public class UserController {
         LOGGER.info("findUserById({})", id);
 
         return userService.findById(id)
-                .map(ResponseEntity::ok)
+                .map(user -> ResponseEntity.ok(convertUser2UserDto.convert(user)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -51,13 +54,10 @@ public class UserController {
     public ResponseEntity findAll() {
         LOGGER.info("findAll()");
 
-        return ResponseEntity.ok(userService.findAll());
-//        List<User> users = userService.findAll();
-//        if (users.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.findAll()
+                .parallelStream()
+                .map(user -> convertUser2UserDto.convert(user))
+                .collect(Collectors.toList()));
     }
 
 
@@ -173,5 +173,10 @@ public class UserController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setConvertUser2UserDto(ConvertUser2UserDto convertUser2UserDto) {
+        this.convertUser2UserDto = convertUser2UserDto;
     }
 }

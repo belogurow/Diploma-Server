@@ -32,13 +32,18 @@ public class UserProfile implements Serializable {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    @Column(name = "avatar_file_id", nullable = true)
+    private UUID avatarFileId;
+
     public UserProfile() {
     }
 
-    public UserProfile(String profession, UUID userId) {
+    public UserProfile(String profession, UUID userId, UUID avatarFileId) {
         this.profession = profession;
         this.userId = userId;
+        this.avatarFileId = avatarFileId;
     }
+
 
     public UUID getId() {
         return id;
@@ -64,8 +69,16 @@ public class UserProfile implements Serializable {
         this.userId = userId;
     }
 
+    public UUID getAvatarFileId() {
+        return avatarFileId;
+    }
 
-    //    public User getUser() {
+    public void setAvatarFileId(UUID avatarFileId) {
+        this.avatarFileId = avatarFileId;
+    }
+
+
+//    public User getUser() {
 //        return user;
 //    }
 //
@@ -86,6 +99,7 @@ public class UserProfile implements Serializable {
                 .append(id, that.id)
                 .append(profession, that.profession)
                 .append(userId, that.userId)
+                .append(avatarFileId, that.avatarFileId)
                 .isEquals();
     }
 
@@ -95,6 +109,7 @@ public class UserProfile implements Serializable {
                 .append(id)
                 .append(profession)
                 .append(userId)
+                .append(avatarFileId)
                 .toHashCode();
     }
 }

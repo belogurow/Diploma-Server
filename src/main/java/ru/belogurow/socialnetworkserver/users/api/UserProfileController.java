@@ -7,14 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.belogurow.socialnetworkserver.users.converter.ConvertUserProfile2UserProfileDto;
 import ru.belogurow.socialnetworkserver.users.service.UserProfileService;
 
-@RestController
-public class UserProfileContoller {
+import java.util.stream.Collectors;
 
-    private static Logger LOGGER = LoggerFactory.getLogger(UserProfileContoller.class);
+@RestController
+public class UserProfileController {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
 
     private UserProfileService userProfileService;
+    private ConvertUserProfile2UserProfileDto convertUserProfile2UserProfileDto;
 
 //    @RequestMapping(value = "/user-profile", method = RequestMethod.GET)
 //    public ResponseEntity findUserProfileByUserId(@RequestParam("userId") UUID userId) {
@@ -29,11 +33,19 @@ public class UserProfileContoller {
     public ResponseEntity findAll() {
         LOGGER.info("findAll()");
 
-        return ResponseEntity.ok(userProfileService.findAll());
+        return ResponseEntity.ok(userProfileService.findAll()
+                .parallelStream()
+                .map(userProfile -> convertUserProfile2UserProfileDto.convert(userProfile))
+                .collect(Collectors.toList()));
     }
 
     @Autowired
     public void setUserProfileService(UserProfileService userProfileService) {
         this.userProfileService = userProfileService;
+    }
+
+    @Autowired
+    public void setConvertUserProfile2UserProfileDto(ConvertUserProfile2UserProfileDto convertUserProfile2UserProfileDto) {
+        this.convertUserProfile2UserProfileDto = convertUserProfile2UserProfileDto;
     }
 }

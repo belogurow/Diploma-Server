@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.belogurow.socialnetworkserver.chat.converter.ConvertFileEntity2FileEntityDto;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
-import ru.belogurow.socialnetworkserver.chat.model.FileType;
 import ru.belogurow.socialnetworkserver.chat.service.FileEntityService;
 import ru.belogurow.socialnetworkserver.common.exception.CustomException;
 import ru.belogurow.socialnetworkserver.common.exception.ErrorCode;
+import ru.belogurow.socialnetworkserver.users.model.UserProfile;
+import ru.belogurow.socialnetworkserver.users.service.UserProfileService;
 
 import java.io.IOException;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class FileController {
     private static Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
     private FileEntityService fileEntityService;
+    private UserProfileService userProfileService;
     private ConvertFileEntity2FileEntityDto convertFileEntity2FileEntityDto;
 
     @RequestMapping(value = "/file/{userId}/avatar", method = RequestMethod.POST)
@@ -33,16 +35,33 @@ public class FileController {
                                            @RequestPart("fileEntity") FileEntity fileEntity,
                                            @PathVariable("userId") UUID userId) throws CustomException, IOException {
         LOGGER.info("uploadUserAvatar({}, {}, {})", file.getName(), fileEntity, userId);
-        //todo save to user resources
 
         if (file.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_IS_EMPTY);
-        } else {
-            fileEntity.setData(file.getBytes());
-            fileEntity.setFileType(FileType.IMAGE);
-            fileEntity.setUpdateTime(new Date());
-            return ResponseEntity.ok(convertFileEntity2FileEntityDto.convert(fileEntityService.save(fileEntity)));
         }
+
+
+        fileEntity.setData(file.getBytes());
+        fileEntity.setUpdateTime(new Date());
+
+        FileEntity fileEntityResult = fileEntityService.save(fileEntity);
+
+        // save new avatar to user_profile
+        Optional<UserProfile> userProfile = userProfileService.getByUserId(userId);
+        if (userProfile.isPresent()) {
+            userProfile.get().setAvatarFileId(fileEntityResult.getId());
+            userProfileService.save(userId, userProfile.get());
+        } else {
+            UserProfile newUseProfile = new UserProfile();
+
+            newUseProfile.setUserId(userId);
+            newUseProfile.setAvatarFileId(fileEntityResult.getId());
+
+            userProfileService.save(userId, newUseProfile);
+        }
+
+        return ResponseEntity.ok(convertFileEntity2FileEntityDto.convert(fileEntityResult));
+
     }
 
     @RequestMapping(value = "/file/{fileId}", method = RequestMethod.GET)
@@ -55,10 +74,8 @@ public class FileController {
             byte[] fileData = file.get().getData();
 
             return ResponseEntity.ok()
-//                    .contentLength(gridFsFile.getLength())
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(fileData);
-//                    .body(new InputStreamResource(IOUtils.tostrefileData.getInputStream()));
         } else {
             throw new CustomException(ErrorCode.FILE_NOT_FOUND);
         }
@@ -83,5 +100,10 @@ public class FileController {
     @Autowired
     public void setConvertFileEntity2FileEntityDto(ConvertFileEntity2FileEntityDto convertFileEntity2FileEntityDto) {
         this.convertFileEntity2FileEntityDto = convertFileEntity2FileEntityDto;
+    }
+
+    @Autowired
+    public void setUserProfileService(UserProfileService userProfileService) {
+        this.userProfileService = userProfileService;
     }
 }
