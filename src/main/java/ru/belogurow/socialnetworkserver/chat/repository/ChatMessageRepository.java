@@ -1,5 +1,6 @@
 package ru.belogurow.socialnetworkserver.chat.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> 
 
     @Query("SELECT m FROM ChatMessage m WHERE m.chatRoomId = :roomId")
     List<ChatMessage> getAllMessagesByChatRoomId(@Param(value = "roomId") UUID roomId);
+
+    @Query("SELECT m FROM ChatMessage m WHERE m.chatRoomId = :roomId")
+    List<ChatMessage> getAllMessagesByChatRoomId(@Param(value = "roomId") UUID roomId, Pageable pageable);
 }

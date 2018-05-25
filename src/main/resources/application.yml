@@ -40,7 +40,7 @@ server:
     key-password: password
     key-alias: tomcat
     key-store-type: PKCS12
-  port: 8080
+  port: 8090
 #  jpa:
 #    properties:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect

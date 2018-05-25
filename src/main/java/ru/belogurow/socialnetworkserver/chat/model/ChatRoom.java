@@ -37,6 +37,7 @@ public class ChatRoom {
         this.secondUserId = secondUserId;
     }
 
+
     public UUID getId() {
         return id;
     }

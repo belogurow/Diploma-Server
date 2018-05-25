@@ -8,20 +8,25 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import ru.belogurow.socialnetworkserver.chat.converter.ConvertChatRoom2ChatRoomDto;
+import ru.belogurow.socialnetworkserver.chat.dto.ChatRoomDto;
 import ru.belogurow.socialnetworkserver.chat.model.ChatMessage;
 import ru.belogurow.socialnetworkserver.chat.model.ChatRoom;
 import ru.belogurow.socialnetworkserver.chat.service.ChatMessageService;
 import ru.belogurow.socialnetworkserver.chat.service.ChatRoomService;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class ChatController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ChatController.class);
 
+    private ConvertChatRoom2ChatRoomDto convertChatRoom2ChatRoomDto;
     private ChatRoomService chatRoomService;
     private ChatMessageService chatMessageService;
 
@@ -30,14 +35,21 @@ public class ChatController {
         LOGGER.info("createChat({})", chatRoom);
 
         Optional<ChatRoom> chatRoomResult = chatRoomService.findByUserIds(chatRoom.getFirstUserId(), chatRoom.getSecondUserId());
-        return chatRoomResult.<ResponseEntity>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.ok(chatRoomService.save(chatRoom)));
+        return chatRoomResult
+                .map(chatRoom1 -> ResponseEntity.ok(convertChatRoom2ChatRoomDto.convert(chatRoom1)))
+                .orElseGet(() -> ResponseEntity.ok(convertChatRoom2ChatRoomDto.convert(chatRoomService.save(chatRoom))));
     }
 
     @RequestMapping(value = "/chat/{userId}", method = RequestMethod.GET)
     public ResponseEntity getAllChatsByUserId(@PathVariable(value = "userId") UUID userId) {
         LOGGER.info("getAllChatsByUserId({})", userId);
 
-        return ResponseEntity.ok(chatRoomService.findAllByUserId(userId));
+        return ResponseEntity.ok(chatRoomService.findAllByUserId(userId)
+                .parallelStream()
+                .map(chatRoom -> convertChatRoom2ChatRoomDto.convert(chatRoom))
+                .sorted(Comparator.comparing(r -> ((ChatRoomDto) r).getLastChatMessage().getDate()).reversed())
+                .collect(Collectors.toList()));
+
     }
 
     @RequestMapping(value = "/chat/{chatId}/messages", method = RequestMethod.GET)
@@ -45,6 +57,17 @@ public class ChatController {
         LOGGER.info("getAllMessagesByChatId({})", chatId);
 
         return ResponseEntity.ok(chatMessageService.getAllMessagesByChatRoomId(chatId));
+    }
+
+    @RequestMapping(value = "/chats", method = RequestMethod.GET)
+    public ResponseEntity getAllChats() {
+        LOGGER.info("getAllChats()");
+
+        return ResponseEntity.ok(chatRoomService.findAll()
+                .parallelStream()
+                .map(chatRoom -> convertChatRoom2ChatRoomDto.convert(chatRoom))
+                .sorted(Comparator.comparing(r -> ((ChatRoomDto) r).getLastChatMessage().getDate()).reversed())
+                .collect(Collectors.toList()));
     }
 
     @Deprecated
@@ -86,5 +109,10 @@ public class ChatController {
     @Autowired
     public void setChatMessageService(ChatMessageService chatMessageService) {
         this.chatMessageService = chatMessageService;
+    }
+
+    @Autowired
+    public void setConvertChatRoom2ChatRoomDto(ConvertChatRoom2ChatRoomDto convertChatRoom2ChatRoomDto) {
+        this.convertChatRoom2ChatRoomDto = convertChatRoom2ChatRoomDto;
     }
 }

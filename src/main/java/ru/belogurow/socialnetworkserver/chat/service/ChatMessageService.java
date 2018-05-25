@@ -17,4 +17,6 @@ public interface ChatMessageService {
     void deleteAll();
 
     List<ChatMessage> getAllMessagesByChatRoomId(UUID chatRoomId);
+
+    ChatMessage getLastChatMessage(UUID chatRoomId);
 }
