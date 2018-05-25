@@ -5,7 +5,10 @@ public enum ErrorCode {
     LOGIN_EXISTS("This login is already exists", 1),
     LOGIN_INCORRECT("Login incorrect", 2),
     PASSWORD_INCORRECT("Password incorrect", 3),
-    USER_IS_NOT_FOUND("User is not found", 4);
+    USER_IS_NOT_FOUND("User is not found", 4),
+
+    FILE_IS_EMPTY("File is empty", 5),
+    FILE_NOT_FOUND("File not found", 6);
 
     private final String description;
     private final int errorNumber;
