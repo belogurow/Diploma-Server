@@ -54,6 +54,7 @@ public class UserControllerTest {
                 .build();
     }
 
+    @Ignore
     @Test
     public void findUserByIdOk() throws Exception {
         User user = UserFamilyCreator.createUserWithId("getUser");
@@ -91,6 +92,7 @@ public class UserControllerTest {
         verifyNoMoreInteractions(userDatabaseService);
     }
 
+    @Ignore
     @Test
     public void getAllOk() throws Exception {
         List<User> users = Arrays.asList(

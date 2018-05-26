@@ -45,6 +45,9 @@ server:
     key-store-type: PKCS12
   port: 8090
 
+logging:
+  file: diploma-server-logs.log
+
 #  jpa:
 #    properties:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect

@@ -3,6 +3,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
 
-    <include file="2018-05-22-create-tables-for-chat.xml" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>
