@@ -1,6 +1,7 @@
 package ru.belogurow.socialnetworkserver.chat.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
 import ru.belogurow.socialnetworkserver.chat.repository.FileEntityRepository;
@@ -35,12 +36,14 @@ public class FileEntityServiceImpl implements FileEntityService {
 
     @Override
     public List<FileEntity> findAll() {
-        return fileEntityRepository.findAll();
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        return fileEntityRepository.findAll(sort);
     }
 
     @Override
     public List<FileEntity> findAllByAuthorId(UUID authorId) {
-        return fileEntityRepository.findAllByAuthorId(authorId);
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        return fileEntityRepository.findAllByAuthorId(authorId, sort);
     }
 
     @Override

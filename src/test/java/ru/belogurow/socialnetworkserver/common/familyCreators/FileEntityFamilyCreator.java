@@ -15,7 +15,7 @@ public class FileEntityFamilyCreator {
         emptyFileEntity.setTitle(title);
         emptyFileEntity.setData(null);
         emptyFileEntity.setUpdateTime(new Date());
-        emptyFileEntity.setFileType(FileType.EMPTY);
+        emptyFileEntity.setFileType(FileType.OTHER);
 
         return emptyFileEntity;
     }
@@ -23,7 +23,7 @@ public class FileEntityFamilyCreator {
     public static FileEntity createJpgFileEntity(String title) throws IOException {
         FileEntity jpgFileEntity = createEmptyFileEntity(title);
 
-        jpgFileEntity.setFileType(FileType.IMAGE);
+        jpgFileEntity.setFileType(FileType.JPG);
         jpgFileEntity.setData(IOUtils.toByteArray(
                 FileEntityFamilyCreator.class.getClassLoader().getResourceAsStream("chat/FileEntityData1.jpg")));
 

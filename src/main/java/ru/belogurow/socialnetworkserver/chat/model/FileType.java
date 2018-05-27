@@ -1,9 +1,11 @@
 package ru.belogurow.socialnetworkserver.chat.model;
 
 public enum FileType {
-    IMAGE,
+    JPG,
     STL,
     PDF,
-    EMPTY,
-    UNDEFINED
+    DICOM,
+    DOC,
+    TXT,
+    OTHER
 }

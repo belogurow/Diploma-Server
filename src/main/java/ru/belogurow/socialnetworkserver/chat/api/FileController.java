@@ -119,7 +119,7 @@ public class FileController {
 
             return ResponseEntity.ok()
                     .contentType(MediaType.MULTIPART_FORM_DATA)
-                    .header("Content-Disposition", "inline; filename=" + fileEntity.getTitle() + "." + fileEntity.getFileType().toString())
+                    .header("Content-Disposition", "inline; filename=" + fileEntity.getTitle() + "." + fileEntity.getFileType().toString().toLowerCase())
                     .body(fileData);
         } else {
             throw new CustomException(ErrorCode.FILE_NOT_FOUND);
