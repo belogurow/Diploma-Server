@@ -17,4 +17,6 @@ public interface FileEntityService {
     List<FileEntity> findAll();
 
     byte[] getFileDataById(UUID fileEntityId);
+
+    List<FileEntity> findAllByAuthorId(UUID authorId);
 }

@@ -16,6 +16,7 @@ public class ConvertFileEntity2FileEntityDto {
         FileEntityDto fileEntityDto = new FileEntityDto();
 
         fileEntityDto.setId(fileEntity.getId());
+        fileEntityDto.setAuthorId(fileEntity.getAuthorId());
         fileEntityDto.setTitle(fileEntity.getTitle());
         fileEntityDto.setDataUrl("/file/" + fileEntity.getId());
         fileEntityDto.setFileType(fileEntity.getFileType());

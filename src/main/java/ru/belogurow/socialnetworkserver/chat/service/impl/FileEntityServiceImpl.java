@@ -39,6 +39,11 @@ public class FileEntityServiceImpl implements FileEntityService {
     }
 
     @Override
+    public List<FileEntity> findAllByAuthorId(UUID authorId) {
+        return fileEntityRepository.findAllByAuthorId(authorId);
+    }
+
+    @Override
     public byte[] getFileDataById(UUID fileEntityId) {
         return fileEntityRepository.findFileDataById(fileEntityId);
     }

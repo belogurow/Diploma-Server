@@ -20,7 +20,7 @@
     <changeSet id="add-fk_avatar_file_id-to-file_entity_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_avatar_file_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_avatar_file_id" foreignKeyTableName="user_profile"/>
             </not>
         </preConditions>
 

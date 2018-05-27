@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -13,4 +14,6 @@ public interface FileEntityRepository extends JpaRepository<FileEntity, UUID> {
 
     @Query("SELECT data FROM FileEntity WHERE id = :fileEntityId")
     byte[] findFileDataById(@Param(value = "fileEntityId") UUID fileEntityId);
+
+    List<FileEntity> findAllByAuthorId(UUID authorId);
 }

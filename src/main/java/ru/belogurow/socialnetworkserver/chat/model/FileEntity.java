@@ -7,7 +7,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,7 +21,8 @@ public class FileEntity {
     @Column(name = "id", unique = true)
     private UUID id;
 
-//    private UUID authorId;
+    @Column(name = "author_id", nullable = false)
+    private UUID authorId;
 
     @Column(name = "title")
     private String title;
@@ -43,7 +43,8 @@ public class FileEntity {
     public FileEntity() {
     }
 
-    public FileEntity(@Null String title, @Null byte[] data, @NotNull Date updateTime, @NotNull FileType fileType) {
+    public FileEntity(UUID authorId, String title, byte[] data, @NotNull Date updateTime, @NotNull FileType fileType) {
+        this.authorId = authorId;
         this.title = title;
         this.data = data;
         this.updateTime = updateTime;
@@ -91,10 +92,19 @@ public class FileEntity {
         this.fileType = fileType;
     }
 
+    public UUID getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(UUID authorId) {
+        this.authorId = authorId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
+                .append("authorId", authorId)
                 .append("title", title)
                 .append("data", data)
                 .append("updateTime", updateTime)
@@ -112,6 +122,7 @@ public class FileEntity {
 
         return new EqualsBuilder()
                 .append(id, that.id)
+                .append(authorId, that.authorId)
                 .append(title, that.title)
                 .append(data, that.data)
                 .append(updateTime, that.updateTime)
@@ -123,6 +134,7 @@ public class FileEntity {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
+                .append(authorId)
                 .append(title)
                 .append(data)
                 .append(updateTime)

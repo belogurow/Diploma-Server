@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="add-column-author_id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="author_id" tableName="file_entity"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="file_entity">
+            <column name="author_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-fk_author_id-to-user_id" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_author_id" foreignKeyTableName="file_entity"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="file_entity"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_author_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+</databaseChangeLog>

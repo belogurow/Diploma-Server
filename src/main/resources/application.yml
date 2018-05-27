@@ -6,6 +6,12 @@ spring:
     username: ${SOCIAL_NETWORK_DB_USERNAME:diploma_server}
     password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma_server}
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   profiles:
     active: https
   jpa:
@@ -27,9 +33,7 @@ spring:
     change-log: classpath:dbconfig/liquibase/liquibaseConfig.xml
     check-change-log-location: true
     drop-first: ${LIQUIBASE_DROP_FIRST:false}
-  servlet:
-    multipart:
-      enabled: true
+
 
 logging:
   level:

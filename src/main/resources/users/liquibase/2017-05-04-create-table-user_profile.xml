@@ -39,7 +39,7 @@
     <changeSet id="create-fk_user_profile-to-user_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_user_profile"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_user_profile" foreignKeyTableName="user_profile"/>
             </not>
         </preConditions>
 

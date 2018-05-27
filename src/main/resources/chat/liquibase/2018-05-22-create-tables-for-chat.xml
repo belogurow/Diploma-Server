@@ -58,7 +58,7 @@
     <changeSet id="create-fk_first_user_id-to-user_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_first_user_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_first_user_id" foreignKeyTableName="chat_room"/>
             </not>
         </preConditions>
 
@@ -73,7 +73,7 @@
     <changeSet id="create-fk_second_user_id-to-user_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_second_user_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_second_user_id" foreignKeyTableName="chat_room"/>
             </not>
         </preConditions>
 
@@ -118,7 +118,7 @@
     <changeSet id="create-fk_chat_message-to-author_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_author_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_author_id" foreignKeyTableName="chat_message"/>
             </not>
         </preConditions>
 
@@ -133,7 +133,7 @@
     <changeSet id="create-fk_chat_room_id-to-chat_room_id" author="belogurow">
         <preConditions>
             <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_chat_room_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_chat_room_id" foreignKeyTableName="chat_message"/>
             </not>
         </preConditions>
 
