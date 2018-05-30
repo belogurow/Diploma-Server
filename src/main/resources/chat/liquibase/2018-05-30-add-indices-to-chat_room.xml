@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="add-index-to-chat_room-id1" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="chat_room"/>
+        </preConditions>
+
+        <createIndex tableName="chat_room" indexName="idx_cr_id">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-chat_room-first_user_id1" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="first_user_id" tableName="chat_room"/>
+        </preConditions>
+
+        <createIndex tableName="chat_room" indexName="idx_cr_first_user_id">
+            <column name="first_user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-chat_room-second_user_id1" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="second_user_id" tableName="chat_room"/>
+        </preConditions>
+
+        <createIndex tableName="chat_room" indexName="idx_cr_second_user_id">
+            <column name="second_user_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -15,10 +15,7 @@ import ru.belogurow.socialnetworkserver.chat.model.ChatRoom;
 import ru.belogurow.socialnetworkserver.chat.service.ChatMessageService;
 import ru.belogurow.socialnetworkserver.chat.service.ChatRoomService;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,6 +44,7 @@ public class ChatController {
         return ResponseEntity.ok(chatRoomService.findAllByUserId(userId)
                 .parallelStream()
                 .map(chatRoom -> convertChatRoom2ChatRoomDto.convert(chatRoom))
+                .filter(chatRoomDto -> Objects.nonNull(chatRoomDto.getLastChatMessage()))
                 .sorted(Comparator.comparing(r -> ((ChatRoomDto) r).getLastChatMessage().getDate()).reversed())
                 .collect(Collectors.toList()));
 
@@ -66,6 +64,7 @@ public class ChatController {
         return ResponseEntity.ok(chatRoomService.findAll()
                 .parallelStream()
                 .map(chatRoom -> convertChatRoom2ChatRoomDto.convert(chatRoom))
+                .filter(chatRoomDto -> Objects.nonNull(chatRoomDto.getLastChatMessage()))
                 .sorted(Comparator.comparing(r -> ((ChatRoomDto) r).getLastChatMessage().getDate()).reversed())
                 .collect(Collectors.toList()));
     }

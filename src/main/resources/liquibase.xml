@@ -8,5 +8,8 @@
     <include file="classpath:chat/liquibase/2018-05-22-create-tables-for-chat.xml" relativeToChangelogFile="true"/>
     <include file="classpath:users/liquibase/2018-05-25-alter-table_user_resource.xml" relativeToChangelogFile="true"/>
     <include file="classpath:chat/liquibase/2018-05-27-alter-table-file_entity.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_room.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_message.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-file_entity.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

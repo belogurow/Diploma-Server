@@ -8,7 +8,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.belogurow.socialnetworkserver.SocialNetworkServerApplication;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
+import ru.belogurow.socialnetworkserver.common.exception.CustomException;
 import ru.belogurow.socialnetworkserver.common.familyCreators.FileEntityFamilyCreator;
+import ru.belogurow.socialnetworkserver.common.familyCreators.UserFamilyCreator;
+import ru.belogurow.socialnetworkserver.users.model.User;
+import ru.belogurow.socialnetworkserver.users.service.UserService;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -28,9 +32,15 @@ public class FileEntityServiceTest {
     @Autowired
     private FileEntityService fileEntityService;
 
+    @Autowired
+    private UserService userService;
+
     @Test
-    public void saveJpg() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG");
+    public void saveJpg() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
 
         FileEntity result = fileEntityService.save(fileEntity);
 
@@ -40,8 +50,11 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void saveStl() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("STL");
+    public void saveStl() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("STL", user.getId());
 
         FileEntity result = fileEntityService.save(fileEntity);
 
@@ -51,8 +64,11 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void savePdf() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("PDF");
+    public void savePdf() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("PDF", user.getId());
 
         FileEntity result = fileEntityService.save(fileEntity);
 
@@ -62,8 +78,11 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void update() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG");
+    public void update() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
 
         FileEntity saveResult = fileEntityService.save(fileEntity);
         assertEquals(fileEntity.getTitle(), saveResult.getTitle());
@@ -83,15 +102,21 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void update1() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG");
+    public void update1() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
 
         fileEntityService.update(fileEntity);
     }
 
     @Test
-    public void findById() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG");
+    public void findById() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
 
         FileEntity saveResult = fileEntityService.save(fileEntity);
         assertEquals(fileEntity.getTitle(), saveResult.getTitle());
@@ -104,10 +129,13 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void findAll() throws IOException {
-        FileEntity fileEntity1 = FileEntityFamilyCreator.createJpgFileEntity("JPG");
-        FileEntity fileEntity2 = FileEntityFamilyCreator.createPdfFileEntity("PDF");
-        FileEntity fileEntity3 = FileEntityFamilyCreator.createStlFileEntity("STL");
+    public void findAll() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity1 = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
+        FileEntity fileEntity2 = FileEntityFamilyCreator.createPdfFileEntity("PDF", user.getId());
+        FileEntity fileEntity3 = FileEntityFamilyCreator.createStlFileEntity("STL", user.getId());
 
         fileEntityService.save(fileEntity1);
         fileEntityService.save(fileEntity2);
@@ -122,8 +150,11 @@ public class FileEntityServiceTest {
     }
 
     @Test
-    public void getFileDataById() throws IOException {
-        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG");
+    public void getFileDataById() throws IOException, CustomException {
+        User user = UserFamilyCreator.createUser("1");
+        userService.save(user);
+
+        FileEntity fileEntity = FileEntityFamilyCreator.createJpgFileEntity("JPG", user.getId());
 
         FileEntity saveResult = fileEntityService.save(fileEntity);
         assertEquals(fileEntity.getTitle(), saveResult.getTitle());
