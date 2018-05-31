@@ -1,0 +1,43 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="add-column-file_entity_id-to-chat_message" author="belogurow">
+        <preConditions>
+            <not>
+                <columnExists tableName="chat_message" columnName="file_entity_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="chat_message">
+            <column name="file_entity_id" type="UUID">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-fk_file_entity_id-to-chat_message" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_file_entity_id" foreignKeyTableName="chat_message"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="chat_message"
+                                 baseColumnNames="file_entity_id"
+                                 constraintName="fk_file_entity_id"
+                                 referencedTableName="file_entity"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="add-index-to-chat_message-file_entity_id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="file_entity_id" tableName="chat_message"/>
+        </preConditions>
+
+        <createIndex tableName="chat_message" indexName="idx_cm_file_entity_id">
+            <column name="file_entity_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

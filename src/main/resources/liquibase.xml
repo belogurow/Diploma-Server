@@ -11,5 +11,9 @@
     <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_room.xml" relativeToChangelogFile="true"/>
     <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_message.xml" relativeToChangelogFile="true"/>
     <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-file_entity.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-column-file_entity-id-to-chat_message.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-create-table-favorite_users.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-add-index-to-user.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-add-indices-to-user_profile.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

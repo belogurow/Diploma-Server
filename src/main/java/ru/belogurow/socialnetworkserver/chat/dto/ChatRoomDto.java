@@ -3,7 +3,6 @@ package ru.belogurow.socialnetworkserver.chat.dto;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import ru.belogurow.socialnetworkserver.chat.model.ChatMessage;
 import ru.belogurow.socialnetworkserver.users.dto.UserDto;
 
 import java.util.UUID;
@@ -12,9 +11,9 @@ public class ChatRoomDto {
     private UUID id;
     private UserDto firstUser;
     private UserDto secondUser;
-    private ChatMessage lastChatMessage;
+    private ChatMessageDto lastChatMessage;
 
-    public ChatRoomDto(UUID id, UserDto firstUser, UserDto secondUser, ChatMessage lastChatMessage) {
+    public ChatRoomDto(UUID id, UserDto firstUser, UserDto secondUser, ChatMessageDto lastChatMessage) {
         this.id = id;
         this.firstUser = firstUser;
         this.secondUser = secondUser;
@@ -48,11 +47,11 @@ public class ChatRoomDto {
         this.secondUser = secondUser;
     }
 
-    public ChatMessage getLastChatMessage() {
+    public ChatMessageDto getLastChatMessage() {
         return lastChatMessage;
     }
 
-    public void setLastChatMessage(ChatMessage lastChatMessage) {
+    public void setLastChatMessage(ChatMessageDto lastChatMessage) {
         this.lastChatMessage = lastChatMessage;
     }
 

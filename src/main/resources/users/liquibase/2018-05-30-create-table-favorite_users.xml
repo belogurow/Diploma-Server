@@ -1,0 +1,87 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="create-table-favorite_users" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="favorite_users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="favorite_users">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="from_user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="to_user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-fk_from_user_id-to-favorite_users-from_user_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_from_user_id" foreignKeyTableName="favorite_users"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="favorite_users"
+                                 baseColumnNames="from_user_id"
+                                 constraintName="fk_from_user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="add-fk_to_user_id-to-favorite_users-to_user_id" author="belogurow">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_to_user_id" foreignKeyTableName="favorite_users"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint baseTableName="favorite_users"
+                                 baseColumnNames="to_user_id"
+                                 constraintName="fk_to_user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+    </changeSet>
+
+    <changeSet id="add-index-to-favorite_users-id3" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="favorite_users"/>
+        </preConditions>
+
+        <createIndex tableName="favorite_users" indexName="idx_fu_id">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-favorite_users-from_user_id1" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="from_user_id" tableName="favorite_users"/>
+        </preConditions>
+
+        <createIndex tableName="favorite_users" indexName="idx_fu_from_user_id">
+            <column name="from_user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-favorite_users-to_user_id1" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="to_user_id" tableName="favorite_users"/>
+        </preConditions>
+
+        <createIndex tableName="favorite_users" indexName="idx_fu_to_user_id">
+            <column name="to_user_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -1,60 +1,34 @@
-package ru.belogurow.socialnetworkserver.chat.model;
+package ru.belogurow.socialnetworkserver.chat.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity
-@Table(name = "chat_message", schema = "public")
-public class ChatMessage {
-
-    @Id
-    @NotNull
-    @GeneratedValue(generator="uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", unique = true)
+public class ChatMessageDto {
     private UUID id;
-
-    @NotNull
-    @Column(name = "author_id", nullable = false)
     private UUID authorId;
-
-    @Column(name = "file_entity_id")
-    private UUID fileEntityId;
-
-    @NotNull
-    @Column(name = "chat_room_id", nullable = false)
     private UUID chatRoomId;
-
-    @NotNull
-    @Column(name = "date")
     private Date date;
-
-    @NotNull
-    @Column(name = "text")
     private String text;
+    private FileEntityDto fileEntity;
 
-//    @OneToMany()
-//    @JoinColumn(name = "files_id", referencedColumnName = "id")
-//    private User user;
-//    List<FileEntity> files;
+    public ChatMessageDto() {
+    }
 
-
-    public ChatMessage(@NotNull UUID authorId, UUID fileEntityId, @NotNull UUID chatRoomId, @NotNull Date date, @NotNull String text) {
+    public ChatMessageDto(UUID id, UUID authorId, UUID chatRoomId, Date date, String text, FileEntityDto fileEntity) {
+        this.id = id;
         this.authorId = authorId;
-        this.fileEntityId = fileEntityId;
         this.chatRoomId = chatRoomId;
         this.date = date;
         this.text = text;
+        this.fileEntity = fileEntity;
     }
 
-    public ChatMessage() {
+    public UUID getId() {
+        return id;
     }
 
     public UUID getAuthorId() {
@@ -65,12 +39,12 @@ public class ChatMessage {
         return chatRoomId;
     }
 
-    public void setChatRoomId(UUID chatRoomId) {
-        this.chatRoomId = chatRoomId;
+    public Date getDate() {
+        return date;
     }
 
-    public UUID getId() {
-        return id;
+    public String getText() {
+        return text;
     }
 
     public void setId(UUID id) {
@@ -81,28 +55,24 @@ public class ChatMessage {
         this.authorId = authorId;
     }
 
-    public Date getDate() {
-        return date;
+    public void setChatRoomId(UUID chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getText() {
-        return text;
-    }
-
     public void setText(String text) {
         this.text = text;
     }
 
-    public UUID getFileEntityId() {
-        return fileEntityId;
+    public FileEntityDto getFileEntity() {
+        return fileEntity;
     }
 
-    public void setFileEntityId(UUID fileEntityId) {
-        this.fileEntityId = fileEntityId;
+    public void setFileEntity(FileEntityDto fileEntity) {
+        this.fileEntity = fileEntity;
     }
 
     @Override
@@ -110,10 +80,10 @@ public class ChatMessage {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("authorId", authorId)
-                .append("fileEntityId", fileEntityId)
                 .append("chatRoomId", chatRoomId)
                 .append("date", date)
                 .append("text", text)
+                .append("fileEntity", fileEntity)
                 .toString();
     }
 
@@ -123,15 +93,15 @@ public class ChatMessage {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        ChatMessage that = (ChatMessage) o;
+        ChatMessageDto that = (ChatMessageDto) o;
 
         return new EqualsBuilder()
                 .append(id, that.id)
                 .append(authorId, that.authorId)
-                .append(fileEntityId, that.fileEntityId)
                 .append(chatRoomId, that.chatRoomId)
                 .append(date, that.date)
                 .append(text, that.text)
+                .append(fileEntity, that.fileEntity)
                 .isEquals();
     }
 
@@ -140,10 +110,10 @@ public class ChatMessage {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(authorId)
-                .append(fileEntityId)
                 .append(chatRoomId)
                 .append(date)
                 .append(text)
+                .append(fileEntity)
                 .toHashCode();
     }
 }

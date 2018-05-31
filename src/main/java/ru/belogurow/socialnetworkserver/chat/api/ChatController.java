@@ -8,7 +8,9 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import ru.belogurow.socialnetworkserver.chat.converter.ConvertChatMessage2ChatMessageDto;
 import ru.belogurow.socialnetworkserver.chat.converter.ConvertChatRoom2ChatRoomDto;
+import ru.belogurow.socialnetworkserver.chat.dto.ChatMessageDto;
 import ru.belogurow.socialnetworkserver.chat.dto.ChatRoomDto;
 import ru.belogurow.socialnetworkserver.chat.model.ChatMessage;
 import ru.belogurow.socialnetworkserver.chat.model.ChatRoom;
@@ -26,6 +28,7 @@ public class ChatController {
     private ConvertChatRoom2ChatRoomDto convertChatRoom2ChatRoomDto;
     private ChatRoomService chatRoomService;
     private ChatMessageService chatMessageService;
+    private ConvertChatMessage2ChatMessageDto convertChatMessage2ChatMessageDto;
 
     @RequestMapping(value = "/chat", method = RequestMethod.POST)
     public ResponseEntity createChat(@RequestBody ChatRoom chatRoom) {
@@ -54,7 +57,10 @@ public class ChatController {
     public ResponseEntity getAllMessagesByChatId(@PathVariable("chatId") UUID chatId) {
         LOGGER.info("getAllMessagesByChatId({})", chatId);
 
-        return ResponseEntity.ok(chatMessageService.getAllMessagesByChatRoomId(chatId));
+        return ResponseEntity.ok(chatMessageService.getAllMessagesByChatRoomId(chatId)
+            .parallelStream()
+            .map(chatMessage -> convertChatMessage2ChatMessageDto.convert(chatMessage))
+            .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/chats", method = RequestMethod.GET)
@@ -83,11 +89,11 @@ public class ChatController {
         return message;
     }
 
-    @MessageMapping("/chatRoom/{chatId}/{authorId}")
+    @MessageMapping("/chatRoom/{chatId}/{authorId}/text")
     @SendTo("/topic/chatRoom/{chatId}/messages")
-    public ChatMessage sendMessage(@DestinationVariable("chatId") String chatId,
-                                   @DestinationVariable("authorId") String authorId,
-                                   String textMessage) {
+    public ChatMessageDto sendMessage(@DestinationVariable("chatId") String chatId,
+                                      @DestinationVariable("authorId") String authorId,
+                                      String textMessage) {
         LOGGER.info("sendMessage({}, {}, {})", chatId, authorId, textMessage);
 
 
@@ -97,8 +103,28 @@ public class ChatController {
         chatMessage.setDate(new Date());
         chatMessage.setText(textMessage);
 
-        return chatMessageService.save(chatMessage);
+        return convertChatMessage2ChatMessageDto.convert(chatMessageService.save(chatMessage));
     }
+
+    @MessageMapping("/chatRoom/{chatId}/{authorId}/file")
+    @SendTo("/topic/chatRoom/{chatId}/messages")
+    public ChatMessageDto sendFile(@DestinationVariable("chatId") String chatId,
+                                   @DestinationVariable("authorId") String authorId,
+                                   String fileEntityId) {
+        LOGGER.info("sendFile({}, {}, {})", chatId, authorId, fileEntityId);
+
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setAuthorId(UUID.fromString(authorId));
+        chatMessage.setChatRoomId(UUID.fromString(chatId));
+        chatMessage.setDate(new Date());
+        chatMessage.setText("File");
+        chatMessage.setFileEntityId(UUID.fromString(fileEntityId));
+
+        return convertChatMessage2ChatMessageDto.convert(chatMessageService.save(chatMessage));
+    }
+
+
 
     @Autowired
     public void setChatRoomService(ChatRoomService chatRoomService) {
@@ -113,5 +139,10 @@ public class ChatController {
     @Autowired
     public void setConvertChatRoom2ChatRoomDto(ConvertChatRoom2ChatRoomDto convertChatRoom2ChatRoomDto) {
         this.convertChatRoom2ChatRoomDto = convertChatRoom2ChatRoomDto;
+    }
+
+    @Autowired
+    public void setConvertChatMessage2ChatMessageDto(ConvertChatMessage2ChatMessageDto convertChatMessage2ChatMessageDto) {
+        this.convertChatMessage2ChatMessageDto = convertChatMessage2ChatMessageDto;
     }
 }
