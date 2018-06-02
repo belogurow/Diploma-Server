@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
+import ru.belogurow.socialnetworkserver.chat.model.FileType;
 import ru.belogurow.socialnetworkserver.chat.repository.FileEntityRepository;
 import ru.belogurow.socialnetworkserver.chat.service.FileEntityService;
+import ru.belogurow.socialnetworkserver.common.util.ImageCompression;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +21,11 @@ public class FileEntityServiceImpl implements FileEntityService {
     private FileEntityRepository fileEntityRepository;
 
     @Override
-    public FileEntity save(FileEntity fileEntity) {
+    public FileEntity save(FileEntity fileEntity) throws IOException {
+        if (fileEntity.getFileType().equals(FileType.JPG)) {
+            // Compress image
+            fileEntity.setData(ImageCompression.compress(fileEntity.getData(), 0.3f));
+        }
         fileEntity.setUpdateTime(new Date());
         return fileEntityRepository.saveAndFlush(fileEntity);
     }
