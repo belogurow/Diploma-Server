@@ -1,4 +1,4 @@
-package ru.belogurow.socialnetworkserver.chat.model;
+package ru.belogurow.socialnetworkserver.users.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chat_room", schema = "public")
-public class ChatRoom {
+@Table(name = "favorite_users", schema = "public")
+public class FavoriteUsers {
 
     @Id
     @NotNull
@@ -22,21 +22,20 @@ public class ChatRoom {
     private UUID id;
 
     @NonNull
-    @Column(name = "first_user_id", nullable = false)
-    private UUID firstUserId;
+    @Column(name = "from_user_id", nullable = false)
+    private UUID fromUserId;
 
     @NonNull
-    @Column(name = "second_user_id", nullable = false)
-    private UUID secondUserId;
+    @Column(name = "to_user_id", nullable = false)
+    private UUID toUserId;
 
-    public ChatRoom() {
+    public FavoriteUsers() {
     }
 
-    public ChatRoom(UUID firstUserId, UUID secondUserId) {
-        this.firstUserId = firstUserId;
-        this.secondUserId = secondUserId;
+    public FavoriteUsers(UUID fromUserId, UUID toUserId) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
     }
-
 
     public UUID getId() {
         return id;
@@ -46,28 +45,28 @@ public class ChatRoom {
         this.id = id;
     }
 
-    public UUID getFirstUserId() {
-        return firstUserId;
+    public UUID getFromUserId() {
+        return fromUserId;
     }
 
-    public void setFirstUserId(UUID firstUserId) {
-        this.firstUserId = firstUserId;
+    public void setFromUserId(UUID fromUserId) {
+        this.fromUserId = fromUserId;
     }
 
-    public UUID getSecondUserId() {
-        return secondUserId;
+    public UUID getToUserId() {
+        return toUserId;
     }
 
-    public void setSecondUserId(UUID secondUserId) {
-        this.secondUserId = secondUserId;
+    public void setToUserId(UUID toUserId) {
+        this.toUserId = toUserId;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("firstUserId", firstUserId)
-                .append("secondUserId", secondUserId)
+                .append("fromUserId", fromUserId)
+                .append("toUserId", toUserId)
                 .toString();
     }
 
@@ -77,12 +76,12 @@ public class ChatRoom {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        ChatRoom chatRoom = (ChatRoom) o;
+        FavoriteUsers that = (FavoriteUsers) o;
 
         return new EqualsBuilder()
-                .append(id, chatRoom.id)
-                .append(firstUserId, chatRoom.firstUserId)
-                .append(secondUserId, chatRoom.secondUserId)
+                .append(id, that.id)
+                .append(fromUserId, that.fromUserId)
+                .append(toUserId, that.toUserId)
                 .isEquals();
     }
 
@@ -90,8 +89,9 @@ public class ChatRoom {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(firstUserId)
-                .append(secondUserId)
+                .append(fromUserId)
+                .append(toUserId)
                 .toHashCode();
     }
 }
+
