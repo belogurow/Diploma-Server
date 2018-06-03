@@ -31,6 +31,7 @@ public class FileController {
     private UserProfileService userProfileService;
     private ConvertFileEntity2FileEntityDto convertFileEntity2FileEntityDto;
 
+    @Deprecated
     @RequestMapping(value = "/file/{userId}/avatar", method = RequestMethod.POST)
     public ResponseEntity uploadUserAvatar(@RequestBody MultipartFile file,
                                            @RequestPart("fileEntity") FileEntity fileEntity,
@@ -76,6 +77,7 @@ public class FileController {
 
         fileEntity.setData(file.getBytes());
         fileEntity.setUpdateTime(new Date());
+
 
         FileEntity fileEntityResult = fileEntityService.save(fileEntity);
 

@@ -24,7 +24,7 @@ public class FileEntityServiceImpl implements FileEntityService {
     public FileEntity save(FileEntity fileEntity) throws IOException {
         if (fileEntity.getFileType().equals(FileType.JPG)) {
             // Compress image
-            fileEntity.setData(ImageCompression.compress(fileEntity.getData(), 0.3f));
+            fileEntity.setData(ImageCompression.compress(fileEntity.getData(), 0.8f));
         }
         fileEntity.setUpdateTime(new Date());
         return fileEntityRepository.saveAndFlush(fileEntity);
