@@ -2,11 +2,13 @@ package ru.belogurow.socialnetworkserver.users.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -26,24 +28,31 @@ public class UserProfile implements Serializable {
     @Column(name = "profession")
     private String profession;
 
-//    @OneToOne()
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
     @Column(name = "avatar_file_id", nullable = true)
     private UUID avatarFileId;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "birth_date", nullable = true)
+    private Date birthDate;
+
+    @Column(name = "role", nullable = false)
+    private UserProfileRole role;
+
     public UserProfile() {
     }
 
-    public UserProfile(String profession, UUID userId, UUID avatarFileId) {
-        this.profession = profession;
-        this.userId = userId;
-        this.avatarFileId = avatarFileId;
+    public UserProfileRole getRole() {
+        return role;
     }
 
+    public void setRole(UserProfileRole role) {
+        this.role = role;
+    }
 
     public UUID getId() {
         return id;
@@ -77,15 +86,34 @@ public class UserProfile implements Serializable {
         this.avatarFileId = avatarFileId;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("profession", profession)
+                .append("userId", userId)
+                .append("avatarFileId", avatarFileId)
+                .append("description", description)
+                .append("birthDate", birthDate)
+                .append("role", role)
+                .toString();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -100,6 +128,9 @@ public class UserProfile implements Serializable {
                 .append(profession, that.profession)
                 .append(userId, that.userId)
                 .append(avatarFileId, that.avatarFileId)
+                .append(description, that.description)
+                .append(birthDate, that.birthDate)
+                .append(role, that.role)
                 .isEquals();
     }
 
@@ -110,6 +141,9 @@ public class UserProfile implements Serializable {
                 .append(profession)
                 .append(userId)
                 .append(avatarFileId)
+                .append(description)
+                .append(birthDate)
+                .append(role)
                 .toHashCode();
     }
 }

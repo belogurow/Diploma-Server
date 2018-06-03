@@ -1,0 +1,54 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="add-column-description-to-user_profile" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="user_profile"/>
+
+            <not>
+                <columnExists tableName="user_profile" columnName="description"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="user_profile">
+            <column name="description" type="VARCHAR(1000)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-birth_date-to-user_profile" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="user_profile"/>
+
+            <not>
+                <columnExists tableName="user_profile" columnName="birth_date"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="user_profile">
+            <column name="birth_date" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-role-to-user_profile" author="belogurow">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="user_profile"/>
+
+            <not>
+                <columnExists tableName="user_profile" columnName="role"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="user_profile">
+            <column name="role" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,24 +1,58 @@
 package ru.belogurow.socialnetworkserver.users.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import ru.belogurow.socialnetworkserver.chat.dto.FileEntityDto;
+import ru.belogurow.socialnetworkserver.users.model.UserProfileRole;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class UserProfileDto {
     private UUID id;
     private String profession;
+    private String description;
     private UUID userId;
+    private Date birthDate;
+    private UserProfileRole role;
     private FileEntityDto avatarFile;
 
     public UserProfileDto() {
     }
 
-    public UserProfileDto(UUID id, String profession, UUID userId, FileEntityDto avatarFile) {
+    public UserProfileDto(UUID id, String profession, String description, UUID userId, Date birthDate, UserProfileRole role, FileEntityDto avatarFile) {
         this.id = id;
         this.profession = profession;
+        this.description = description;
         this.userId = userId;
+        this.birthDate = birthDate;
+        this.role = role;
         this.avatarFile = avatarFile;
+    }
+
+    public UserProfileRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserProfileRole role) {
+        this.role = role;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public UUID getId() {
@@ -58,8 +92,43 @@ public class UserProfileDto {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("profession", profession)
+                .append("description", description)
                 .append("userId", userId)
+                .append("birthDate", birthDate)
+                .append("role", role)
                 .append("avatarFile", avatarFile)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserProfileDto that = (UserProfileDto) o;
+
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .append(profession, that.profession)
+                .append(description, that.description)
+                .append(userId, that.userId)
+                .append(birthDate, that.birthDate)
+                .append(role, that.role)
+                .append(avatarFile, that.avatarFile)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(profession)
+                .append(description)
+                .append(userId)
+                .append(birthDate)
+                .append(role)
+                .append(avatarFile)
+                .toHashCode();
     }
 }

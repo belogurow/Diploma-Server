@@ -24,11 +24,18 @@ public class ConvertUserProfile2UserProfileDto {
 
         userProfileDto.setId(userProfile.getId());
         userProfileDto.setProfession(userProfile.getProfession());
+        userProfileDto.setDescription(userProfile.getDescription());
         userProfileDto.setUserId(userProfile.getUserId());
+        userProfileDto.setBirthDate(userProfile.getBirthDate());
+        userProfileDto.setRole(userProfile.getRole());
 
-        Optional<FileEntity> fileEntity = fileEntityService.findById(userProfile.getAvatarFileId());
-        if (fileEntity.isPresent()) {
-            userProfileDto.setAvatarFile(convertFileEntity2FileEntityDto.convert(fileEntity.get()));
+        if (userProfile.getAvatarFileId() != null) {
+            Optional<FileEntity> fileEntity = fileEntityService.findById(userProfile.getAvatarFileId());
+            if (fileEntity.isPresent()) {
+                userProfileDto.setAvatarFile(convertFileEntity2FileEntityDto.convert(fileEntity.get()));
+            } else {
+                userProfileDto.setAvatarFile(null);
+            }
         } else {
             userProfileDto.setAvatarFile(null);
         }

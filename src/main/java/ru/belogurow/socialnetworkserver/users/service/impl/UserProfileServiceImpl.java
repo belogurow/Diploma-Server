@@ -24,16 +24,6 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile save(UUID userId, UserProfile userProfile) throws CustomException {
-//        Optional<User> user = userService.findById(userId);
-//
-//        // TODO: 05.04.2018 USER PROFILE FOR THIS USER DOES NOT EXISTS
-//
-//        if (user.isPresent()) {
-//            userProfile.setUser(user.get());
-//            return userProfileRepository.save(userProfile);
-//        } else {
-//            throw new CustomException(ErrorCode.USER_IS_NOT_FOUND);
-//        }
         if (userService.existsById(userId)) {
             userProfile.setUserId(userId);
             return userProfileRepository.saveAndFlush(userProfile);

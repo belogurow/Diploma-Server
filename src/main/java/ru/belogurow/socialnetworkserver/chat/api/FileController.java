@@ -31,39 +31,39 @@ public class FileController {
     private UserProfileService userProfileService;
     private ConvertFileEntity2FileEntityDto convertFileEntity2FileEntityDto;
 
-    @Deprecated
-    @RequestMapping(value = "/file/{userId}/avatar", method = RequestMethod.POST)
-    public ResponseEntity uploadUserAvatar(@RequestBody MultipartFile file,
-                                           @RequestPart("fileEntity") FileEntity fileEntity,
-                                           @PathVariable("userId") UUID userId) throws CustomException, IOException {
-        LOGGER.info("uploadUserAvatar({}, {}, {})", file.getName(), fileEntity, userId);
-
-        if (file.isEmpty()) {
-            throw new CustomException(ErrorCode.FILE_IS_EMPTY);
-        }
-
-
-        fileEntity.setData(file.getBytes());
-        fileEntity.setUpdateTime(new Date());
-
-        FileEntity fileEntityResult = fileEntityService.save(fileEntity);
-
-        // save new avatar to user_profile
-        Optional<UserProfile> userProfile = userProfileService.getByUserId(userId);
-        if (userProfile.isPresent()) {
-            userProfile.get().setAvatarFileId(fileEntityResult.getId());
-            userProfileService.save(userId, userProfile.get());
-        } else {
-            UserProfile newUseProfile = new UserProfile();
-
-            newUseProfile.setUserId(userId);
-            newUseProfile.setAvatarFileId(fileEntityResult.getId());
-
-            userProfileService.save(userId, newUseProfile);
-        }
-
-        return ResponseEntity.ok(convertFileEntity2FileEntityDto.convert(fileEntityResult));
-    }
+//    @Deprecated
+//    @RequestMapping(value = "/file/{userId}/avatar", method = RequestMethod.POST)
+//    public ResponseEntity uploadUserAvatar(@RequestBody MultipartFile file,
+//                                           @RequestPart("fileEntity") FileEntity fileEntity,
+//                                           @PathVariable("userId") UUID userId) throws CustomException, IOException {
+//        LOGGER.info("uploadUserAvatar({}, {}, {})", file.getName(), fileEntity, userId);
+//
+//        if (file.isEmpty()) {
+//            throw new CustomException(ErrorCode.FILE_IS_EMPTY);
+//        }
+//
+//
+//        fileEntity.setData(file.getBytes());
+//        fileEntity.setUpdateTime(new Date());
+//
+//        FileEntity fileEntityResult = fileEntityService.save(fileEntity);
+//
+//        // save new avatar to user_profile
+//        Optional<UserProfile> userProfile = userProfileService.getByUserId(userId);
+//        if (userProfile.isPresent()) {
+//            userProfile.get().setAvatarFileId(fileEntityResult.getId());
+//            userProfileService.save(userId, userProfile.get());
+//        } else {
+//            UserProfile newUseProfile = new UserProfile();
+//
+//            newUseProfile.setUserId(userId);
+//            newUseProfile.setAvatarFileId(fileEntityResult.getId());
+//
+//            userProfileService.save(userId, newUseProfile);
+//        }
+//
+//        return ResponseEntity.ok(convertFileEntity2FileEntityDto.convert(fileEntityResult));
+//    }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public ResponseEntity uploadFile(@RequestBody MultipartFile file,
@@ -101,13 +101,6 @@ public class FileController {
         return ResponseEntity.ok(convertFileEntity2FileEntityDto.convert(fileEntityResult));
     }
 
-//    @RequestMapping(value = "/files", method = RequestMethod.GET)
-//    public ResponseEntity getAllFilesByUserId(@RequestParam("userId") UUID userId) {
-//        LOGGER.info("getAllFilesByUserId({})", userId);
-//
-//        return ResponseEntity.ok(fileEntityService
-//        .)
-//    }
 
     @RequestMapping(value = "/file/{fileId}", method = RequestMethod.GET)
     public ResponseEntity getFile(@PathVariable("fileId") UUID fileId) throws CustomException {
