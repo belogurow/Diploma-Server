@@ -1,13 +1,73 @@
 spring:
   datasource:
-    name: postgres
+    name: diploma-server
     driver-class-name: org.postgresql.Driver
-    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/postgres}
-    username: ${SOCIAL_NETWORK_DB_USERNAME:diploma-server}
-    password: ${SOCIAL_NETWORK_DB_URL:diploma-server}
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma_server}
+    username: ${SOCIAL_NETWORK_DB_USERNAME:diploma_server}
+    password: ${SOCIAL_NETWORK_DB_PASSWORD:diploma_server}
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  profiles:
+    active: https
+  jpa:
+    properties:
+      hibernate:
+#        show_sql: true
+#        use_sql_comments: true
+#        format_sql: true
+
+        temp:
+          use_jdbc_metadata_defaults: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+#
+#    hibernate:
+#      ddl-auto: create
+#    generate-ddl: true
 
   liquibase:
     change-log: classpath:dbconfig/liquibase/liquibaseConfig.xml
     check-change-log-location: true
-    drop-first: ${LIQUIBASE_DROP_FIRST:false}
+    drop-first: ${LIQUIBASE_DROP_FIRST:true}
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+server:
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: password
+    key-password: password
+    key-alias: tomcat
+    key-store-type: PKCS12
+  port: 8090
+
+logging:
+  file: diploma-server-logs.log
+
+#  jpa:
+#    properties:
+#      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: true
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    name: diploma-server-test
+    driver-class-name: org.postgresql.Driver
+    url: ${SOCIAL_NETWORK_DB_URL:jdbc:postgresql://localhost:5432/diploma_server_test}
+    username: ${SOCIAL_NETWORK_DB_TEST_USERNAME:diploma_server}
+    password: ${SOCIAL_NETWORK_DB_TEST_PASSWORD:diploma_server}
+  liquibase:
+    drop-first: true

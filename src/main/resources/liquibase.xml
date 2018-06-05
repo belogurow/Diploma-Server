@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <include file="classpath:users/liquibase/2017-03-23-create-table-user.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2017-05-04-create-table-user_profile.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-22-create-tables-for-chat.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-25-alter-table_user_resource.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-27-alter-table-file_entity.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_room.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-chat_message.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-indices-to-file_entity.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:chat/liquibase/2018-05-30-add-column-file_entity-id-to-chat_message.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-create-table-favorite_users.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-add-index-to-user.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-05-30-add-indices-to-user_profile.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:users/liquibase/2018-06-03-add-columns-to-user_profile.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

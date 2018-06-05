@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="add-index-to-user_profile-id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="user_profile"/>
+        </preConditions>
+
+        <createIndex tableName="user_profile" indexName="idx_up_id">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-user_profile-avatar_file_id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="avatar_file_id" tableName="user_profile"/>
+        </preConditions>
+
+        <createIndex tableName="user_profile" indexName="idx_up_avatar_file_id">
+            <column name="avatar_file_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

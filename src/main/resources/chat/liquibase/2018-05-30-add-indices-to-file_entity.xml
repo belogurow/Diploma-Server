@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="add-index-to-file_entity-id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="file_entity"/>
+        </preConditions>
+
+        <createIndex tableName="file_entity" indexName="idx_fe_id">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-index-to-file_entity-author_id" author="abelogurow">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="author_id" tableName="file_entity"/>
+        </preConditions>
+
+        <createIndex tableName="file_entity" indexName="idx_fe_author_id">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

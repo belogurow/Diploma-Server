@@ -6,20 +6,28 @@
     <changeSet id="create-table-user" author="belogurow">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="USER"/>
+                <tableExists tableName="user"/>
             </not>
         </preConditions>
 
-        <createTable tableName="USER">
-            <column name="ID" type="UUID">
-                <constraints primaryKey="true" primaryKeyName="PK_USER"/>
+        <createTable tableName="user">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
             </column>
 
-            <column name="NAME" type="CHARACTER(100)">
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="PASSWORD" type="CHARACTER(100)">
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_role" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
