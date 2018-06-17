@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.belogurow.socialnetworkserver.SocialNetworkServerApplication;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
 import ru.belogurow.socialnetworkserver.common.exception.CustomException;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {SocialNetworkServerApplication.class})
 @ActiveProfiles(profiles = "test")
-//@Transactional
+@Transactional
 public class FileEntityServiceTest {
 
     @Autowired
