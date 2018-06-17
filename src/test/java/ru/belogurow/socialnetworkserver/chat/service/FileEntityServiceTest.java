@@ -14,7 +14,6 @@ import ru.belogurow.socialnetworkserver.common.familyCreators.UserFamilyCreator;
 import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {SocialNetworkServerApplication.class})
 @ActiveProfiles(profiles = "test")
-@Transactional
+//@Transactional
 public class FileEntityServiceTest {
 
     @Autowired
@@ -47,6 +46,8 @@ public class FileEntityServiceTest {
         assertEquals(fileEntity.getTitle(), result.getTitle());
         assertEquals(fileEntity.getFileType(), result.getFileType());
         assertTrue(Arrays.equals(fileEntity.getData(), result.getData()));
+
+        //FileUtils.writeByteArrayToFile(new File("result.jpg"), result.getData());
     }
 
     @Test

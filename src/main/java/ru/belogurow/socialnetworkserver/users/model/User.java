@@ -53,6 +53,10 @@ public class User implements Serializable {
     public User() {
     }
 
+    // getters and setters
+    // ...
+
+
     public User(UUID id, String username, String name, String password, UserRole userRole) {
         this.id = id;
         this.username = username;

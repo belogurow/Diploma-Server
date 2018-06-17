@@ -58,9 +58,10 @@ public class ChatController {
         LOGGER.info("getAllMessagesByChatId({})", chatId);
 
         return ResponseEntity.ok(chatMessageService.getAllMessagesByChatRoomId(chatId)
-            .parallelStream()
-            .map(chatMessage -> convertChatMessage2ChatMessageDto.convert(chatMessage))
-            .collect(Collectors.toList()));
+                .parallelStream()
+                .map(chatMessage -> convertChatMessage2ChatMessageDto.convert(chatMessage))
+                .sorted(Comparator.comparing(ChatMessageDto::getDate))
+                .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/chats", method = RequestMethod.GET)
