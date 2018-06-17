@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.belogurow.socialnetworkserver.SocialNetworkServerApplication;
 import ru.belogurow.socialnetworkserver.chat.model.FileEntity;
 import ru.belogurow.socialnetworkserver.common.exception.CustomException;
@@ -14,7 +15,6 @@ import ru.belogurow.socialnetworkserver.common.familyCreators.UserFamilyCreator;
 import ru.belogurow.socialnetworkserver.users.model.User;
 import ru.belogurow.socialnetworkserver.users.service.UserService;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +47,8 @@ public class FileEntityServiceTest {
         assertEquals(fileEntity.getTitle(), result.getTitle());
         assertEquals(fileEntity.getFileType(), result.getFileType());
         assertTrue(Arrays.equals(fileEntity.getData(), result.getData()));
+
+        //FileUtils.writeByteArrayToFile(new File("result.jpg"), result.getData());
     }
 
     @Test

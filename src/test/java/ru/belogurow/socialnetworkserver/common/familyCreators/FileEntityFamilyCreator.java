@@ -27,7 +27,7 @@ public class FileEntityFamilyCreator {
 
         jpgFileEntity.setFileType(FileType.JPG);
         jpgFileEntity.setData(IOUtils.toByteArray(
-                FileEntityFamilyCreator.class.getClassLoader().getResourceAsStream("chat/FileEntityData1.jpg")));
+                FileEntityFamilyCreator.class.getClassLoader().getResourceAsStream("chat/test.jpg")));
 
         return jpgFileEntity;
     }

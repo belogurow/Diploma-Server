@@ -59,7 +59,6 @@ public class UserControllerTest {
     public void findUserByIdOk() throws Exception {
         User user = UserFamilyCreator.createUserWithId("getUser");
 
-
         when(userDatabaseService.findById(user.getId())).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/users/{id}", user.getId()))
